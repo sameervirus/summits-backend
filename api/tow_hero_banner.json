@@ -1,0 +1,32 @@
+[
+  {
+      "id": 1,
+      "title": "banner-meat-needs-title",
+      "description": "banner-healthy-vegetable-description",
+      "btnText": "text-explore-more",
+      "btnUrl": "/search",
+      "image": {
+        "mobile": {
+          "url": "/assets/images/hero/slider_1.jpg"
+        },
+        "desktop": {
+          "url": "/assets/images/hero/slider_1.jpg"
+        }
+      }
+  },
+  {
+      "id": 2,
+      "title": "banner-thousand-grocery-title",
+      "description": "banner-thousand-grocery-title-description",
+      "btnText": "text-explore-more",
+      "btnUrl": "/search",
+      "image": {
+        "mobile": {
+          "url": "/assets/images/hero/slider_2.jpg"
+        },
+        "desktop": {
+          "url": "/assets/images/hero/slider_2.jpg"
+        }
+      }
+  }
+]

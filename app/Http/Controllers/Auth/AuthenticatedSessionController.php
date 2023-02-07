@@ -22,8 +22,6 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
 
         return response([
-            'status' => 'success',
-            'user' => $user,
             'token' => $token,
             'permissions' => $user->getAllPermissions()->pluck('name')->toArray()
         ]);

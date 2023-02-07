@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "title": "Try Fresh Healthy Breakfast on Morning",
+        "slug": "/search",
+        "type": "medium",
+        "image": {
+          "mobile": {
+            "url": "/assets/images/banner/banner-1.jpg",
+            "width": 840,
+            "height": 240
+          },
+          "desktop": {
+            "url": "/assets/images/banner/banner-1.jpg",
+            "width": 840,
+            "height": 240
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Today best deal",
+        "slug": "/search",
+        "type": "small",
+        "image": {
+          "mobile": {
+            "url": "/assets/images/banner/banner-2.jpg",
+            "width": 840,
+            "height": 240
+          },
+          "desktop": {
+            "url": "/assets/images/banner/banner-2.jpg",
+            "width": 840,
+            "height": 240
+          }
+        }
+      }
+]

@@ -17,3 +17,8 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth'])->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('fake/{file}', function()
+{
+    return response()->file(app_path('../api/'. request('file')));
+});
