@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -49,5 +51,36 @@ class NewPasswordController extends Controller
         }
 
         return response()->json(['status' => __($status)]);
+    }
+
+    /**
+     * Handle an incoming change password request.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(Request $request): JsonResponse
+    {
+        $request->validate([
+            'oldPassword' => ['required'],
+            'newPassword' => ['required', Rules\Password::defaults()]
+        ]);
+
+        $user = Auth::user();
+
+        if($user) {
+            if(Hash::check($request->oldPassword, $user->password))
+            {
+                $user->password = Hash::make($request->newPassword);
+                $user->save();
+
+                $status = "Password Changed";
+            } else {
+                throw ValidationException::withMessages([
+                    'email' => __('auth.password'),
+                ]);
+            }
+        }
+
+        return response()->json(['status' => __('passwords.reset')]);
     }
 }
