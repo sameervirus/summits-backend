@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,17 @@ class City extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    protected $appends = ['value', 'label'];
+    public function getValueAttribute()
+    {
+        return $this->id;
+    }
+
+    public function getLabelAttribute()
+    {
+        return $this->city_name_ar;
+    }
 
     public function governorate()
     {

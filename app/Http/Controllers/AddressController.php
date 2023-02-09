@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AddressController extends Controller
 {
@@ -14,7 +16,8 @@ class AddressController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        return $user->addresses;
     }
 
     /**
@@ -33,9 +36,34 @@ class AddressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request) : JsonResponse
     {
-        //
+        $request->validate([
+            'title' => 'required',
+            'address' => 'required',
+            'governorate_id' => 'required',
+            'city_id' => 'required',
+        ]);
+
+        if($request->has('id')) $address = Address::findOrFail($request->id);
+        else $address = new Address();
+
+        try {
+            $address->title = $request->title;
+            $address->address = $request->address;
+            $address->governorate_id = $request->governorate_id;
+            $address->city_id = $request->city_id;
+            $address->user_id = Auth::user()->id;
+            $address->default = false;
+            $address->save();
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('success'),
+        ]);
     }
 
     /**
