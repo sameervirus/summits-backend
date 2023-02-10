@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,7 @@ Route::middleware(['auth'])->get('/user', function (Request $request) {
 });
 Route::middleware(['auth'])->group(function () {
     Route::resource('addresses', AddressController::class);
+    Route::resource('users', UserController::class);
 });
 Route::get('governorates', [CommonController::class, 'governorates']);
 Route::get('cities', [CommonController::class, 'cities']);

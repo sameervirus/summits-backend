@@ -72,8 +72,6 @@ class NewPasswordController extends Controller
             {
                 $user->password = Hash::make($request->newPassword);
                 $user->save();
-
-                $status = "Password Changed";
             } else {
                 throw ValidationException::withMessages([
                     'email' => __('auth.password'),
