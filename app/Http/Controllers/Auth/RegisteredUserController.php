@@ -41,7 +41,6 @@ class RegisteredUserController extends Controller
         $token = Auth::login($user);
 
         return response([
-
             'token' => $token,
             'permissions' => $user->getAllPermissions()->pluck('name')->toArray()
         ]);
