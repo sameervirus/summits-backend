@@ -23,4 +23,3 @@ Route::get('/', function(){
         "app" => "Summits Application",
     ];
 });
-require __DIR__.'/admin.php';
