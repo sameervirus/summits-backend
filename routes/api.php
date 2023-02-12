@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::get('governorates', [CommonController::class, 'governorates']);
 Route::get('cities', [CommonController::class, 'cities']);
-
+Route::resource('brands', BrandController::class);
 
 Route::get('fake/{file}', function()
 {

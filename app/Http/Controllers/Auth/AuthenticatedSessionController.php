@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -20,6 +21,14 @@ class AuthenticatedSessionController extends Controller
         // $request->session()->regenerate();
 
         $user = Auth::user();
+
+        if($request->has('type') && $request->type == 'admin') {
+            if(! $user->hasRole('admin')) {
+                throw ValidationException::withMessages([
+                    'email' => __('auth.failed'),
+                ]);
+            }
+        }
 
         return response([
             'token' => $token,

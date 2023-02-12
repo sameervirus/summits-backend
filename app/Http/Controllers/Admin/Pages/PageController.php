@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Pages;
 
-use App\Http\Resources\BrandResource;
-use App\Models\Brand;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use s\Admin\Pages\Page;
 
-class BrandController extends Controller
+class PageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return BrandResource::collection(Brand::all());
+        //
     }
 
     /**
@@ -23,9 +23,10 @@ class BrandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function video()
     {
-        //
+        $data = Page::where('page', 'video')->firstOrFail();
+        return view('admin.pages', ['data' => $data]);
     }
 
     /**
@@ -42,44 +43,50 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  int  Page $page
      * @return \Illuminate\Http\Response
      */
-    public function show(Brand $brand)
+    public function show(Page $page)
     {
-        return new BrandResource($brand);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  int  Page $page
      * @return \Illuminate\Http\Response
      */
-    public function edit(Brand $brand)
+    public function edit($page)
     {
-        //
+        $data = Page::where('page', $page)->firstOrFail();
+        return view('admin.pages', ['data' => $data]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Brand  $brand
+     * @param  int  Page $page
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Brand $brand)
+    public function update(Request $request, Page $page)
     {
-        //
+
+        $page->content = $request->content;
+        $page->content_ar = $request->content_ar;
+        $page->save();
+
+        return redirect('admin/pages/'. $request->page . '/edit')->with('message','Updated');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  int  Page $page
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Brand $brand)
+    public function destroy(Page $page)
     {
         //
     }
