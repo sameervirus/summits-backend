@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::get('governorates', [CommonController::class, 'governorates']);
 Route::get('cities', [CommonController::class, 'cities']);
-Route::resource('brands', BrandController::class);
+Route::resource('brands', BrandController::class)->scoped(['brand' => 'slug']);
 
 Route::get('fake/{file}', function()
 {

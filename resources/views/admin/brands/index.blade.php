@@ -70,7 +70,7 @@
                     </div>
                     <div class="x_content">
                         <p>
-                            <a href="{{route('admin.brands.create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add News & Events</a>
+                            <a href="{{route('admin.brands.create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add Brand</a>
                         </p>
                         <div id="message-box">Drag and Drop to resort</div>
                         <div class="table-responsive">
@@ -78,8 +78,8 @@
                                 <thead>
                                     <tr class="headings">
                                         <th>No.</th>
-                                        <th class="column-title">Model</th>
-                                        <th class="column-title">الموديل</th>
+                                        <th class="column-title">Name</th>
+                                        <th class="column-title">الاسم</th>
                                         <th class="column-title no-link last"><span class="nobr">Action</span>
                                         </th>
                                     </tr>
@@ -90,8 +90,8 @@
                                         <td class="a-center ">
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td class="name">{{ \Str::title(str_replace('_', ' ', $brand->model)) }}</td>
-                                        <td class="name">{{ $brand->model_ar }}</td>
+                                        <td class="name">{{ $brand->name }}</td>
+                                        <td class="name">{{ $brand->name_arabic }}</td>
                                         <td class="">
                                             <a href="{{route('admin.brands.edit', ['brand' => $brand->id] ) }}" data-id="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                             <a href="" onclick="event.preventDefault(); document.getElementById('del_{{$brand->id}}').click();"
@@ -121,8 +121,5 @@
 
 @section('jsFiles')
 
-    <!-- iCheck -->
-    <script src="{{asset('vendors/iCheck/icheck.min.js')}}"></script>
-    <script src="{{asset('vendors/tinymce/js/tinymce/tinymce.min.js')}}"></script>
 
 @endsection

@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->text('address_arabic')->nullable();
-            $table->text('description')->nullable();
-            $table->text('description_arabic')->nullable();
+            $table->text('description');
+            $table->text('description_arabic');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

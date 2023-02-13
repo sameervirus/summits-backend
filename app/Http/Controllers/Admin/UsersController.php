@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUsersRequest;
 use App\Http\Requests\Admin\UpdateUsersRequest;
+use App\Models\User;
 
 class UsersController extends Controller
 {

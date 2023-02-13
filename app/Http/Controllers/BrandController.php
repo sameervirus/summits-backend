@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\BrandResource;
+use App\Http\Resources\BrandsResource;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        //
+        return BrandsResource::collection(Brand::all());
     }
 
     /**
@@ -47,7 +48,7 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        return $brand->getMedia('logos');
+        return new BrandResource($brand);
     }
 
     /**

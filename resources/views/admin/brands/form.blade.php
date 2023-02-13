@@ -44,13 +44,13 @@
 </div>
 
 <div class="form-group">
-    <label for="description" class="col-md-2 control-label">Description الوصف</label>
+    <label for="description" class="col-md-2 control-label">Description الوصف*</label>
 
     <div class="col-md-5">
-        <textarea type="text" name="description" id="description" class="form-control" row="4" placeholder="description">{!! $item->description ?? '' !!}</textarea>
+        <textarea type="text" name="description" id="description" class="form-control" row="4" placeholder="description" required>{!! $item->description ?? '' !!}</textarea>
     </div>
     <div class="col-md-5">
-        <textarea type="text" name="description_arabic" class="form-control" row="4" placeholder="الوصف">{!! $item->description_arabic ?? '' !!}</textarea>
+        <textarea type="text" name="description_arabic" class="form-control" row="4" placeholder="الوصف" required>{!! $item->description_arabic ?? '' !!}</textarea>
     </div>
 </div>
 
@@ -58,7 +58,7 @@
     <label for="logo" class="col-md-2 control-label">Logo*</label>
 
     <div class="col-md-10">
-        <input id="logo" type="file" class="form-control" name="logo" accept="images/*" required>
+        <input id="logo" type="file" class="form-control" name="logo" accept="images/*" {{ @$item ? '' : 'required'}}>
     </div>
 </div>
 
@@ -66,6 +66,6 @@
     <label for="logo" class="col-md-2 control-label">Banner*</label>
 
     <div class="col-md-10">
-        <input id="banner" type="file" class="form-control" name="banner" accept="images/*" required>
+        <input id="banner" type="file" class="form-control" name="banner" accept="images/*" {{ @$item ? '' : 'required'}}>
     </div>
 </div>
