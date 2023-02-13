@@ -17,7 +17,7 @@
                     @endcan
                 </ul>
             </li>
-			
+
             <li><a><i class="fa fa-home"></i>Home Page<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     @if(Request::getHost() == 'www.lavor-egypt.com')
@@ -28,7 +28,7 @@
                     @endif
 				</ul>
             </li>
-        
+
 			<li><a><i class="fa fa-file-powerpoint-o"></i>Static Pages<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     @foreach($pages as $page)
@@ -37,21 +37,10 @@
                     @endforeach
 				</ul>
             </li>
-        
+
 			<li><a><i class="fa fa-desktop"></i>Dynamic Pages<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    @if(Request::getHost() == 'www.lavor-egypt.com')
-                    <li><a href="{{route('products.index')}}">Products</a></li>
-                    <li><a href="{{route('downloads.index')}}">Media Library</a></li>
-                    @endif
-                    @if(Request::getHost() == 'www.wortex-egypt.com')
-                    <li><a href="{{route('wproducts.index')}}">Products</a></li>
-                    @endif
-                    @if(Request::getHost() == 'www.piusi-egypt.com')
-                    <li><a href="{{route('pproducts.index')}}">Products</a></li>
-                    @endif
-                    <li><a href="{{route('posts.index')}}">News & Events</a></li>
-                    <li><a href="{{route('distributors.index')}}">Distributors موزعين</a></li>
+                    <li><a href="{{route('admin.brands.index')}}">Brands</a></li>
                     <li><a href="{{route('feedbacks.index')}}">رسائل الموقع</a></li>
                 </ul>
             </li>
@@ -73,7 +62,7 @@
             </li>
             @endcan
         </ul>
-    </div>    
+    </div>
 </div>
 <!-- /sidebar menu -->
 <!-- /menu footer buttons -->

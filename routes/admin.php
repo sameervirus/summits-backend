@@ -11,10 +11,18 @@
 |
 */
 
+use App\Http\Controllers\Admin\BrandAdminController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SiteContent\SitecontentController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
+
+    Route::resource("brands", BrandAdminController::class, [
+        'as' => 'admin'
+    ]);
+
+
     Route::get("/", [SitecontentController::class, 'index']);
 
     Route::post("/reorder", "Admin\AdminController@reorder")->name("reorder");
@@ -28,21 +36,13 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
     Route::post("/upload/img", "Admin\AdminController@upload_img");
 
     Route::resource("slider", "Admin\Slide\SliderController");
-    Route::resource("sitecontent", "Admin\SiteContent\SitecontentController");
-    Route::resource("products", "Admin\Product\ProductController");
-    Route::resource("wproducts", "Admin\Product\WproductController");
-    Route::resource("pproducts", "Admin\Product\PproductController");
-    Route::post("/wdelimg", "Admin\AdminController@wdelimg")->name("wdelimg");
-    Route::post("/pdelimg", "Admin\AdminController@pdelimg")->name("pdelimg");
+    Route::resource("sitecontent", SitecontentController::class);
+
 
     Route::resource("/pages", "Admin\Pages\PageController");
-    Route::get("/pages-video", "Admin\Pages\PageController@video")->name(
-        "pages.video"
-    );
 
-    Route::resource("downloads", "Admin\DownloadController");
-    Route::resource("posts", "Admin\PostController");
-    Route::resource("distributors", "Admin\DistributorController");
+
+    Route::resource("posts", PostController::class);
 
     Route::get("/feedbacks", "Admin\AdminController@feedbacks")->name(
         "feedbacks.index"

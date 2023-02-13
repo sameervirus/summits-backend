@@ -28,16 +28,16 @@ class BrandResource extends JsonResource
             "description" => $this->description,
             "description_arabic" => $this->description_arabic,
             "cover_image" => [
-                "id" =>  1,
-                "thumbnail" =>  "/assets/images/shop/shop-banner-1.jpg",
-                "original" =>  "/assets/images/shop/shop-banner-mobile-1.png"
+                "id" =>  optional($this->getFirstMedia('banners'))->id,
+                "thumbnail" =>  optional($this->getFirstMedia('banners'))->getFullUrl(),
+                "original" =>  optional($this->getFirstMedia('banners'))->getFullUrl()
             ],
             "logo" => [
-                "id" =>  1,
-                "thumbnail" =>  "/assets/images/shop/shop-logo-1.jpg",
-                "original" =>  "/assets/images/shop/shop-logo-1.jpg"
+                "id" =>  optional($this->getFirstMedia('logos'))->id,
+                "thumbnail" =>  optional($this->getFirstMedia('logos'))->getFullUrl(),
+                "original" =>  optional($this->getFirstMedia('logos'))->getFullUrl()
             ],
-            "created_at" =>  $this->create_at->format('Y-m-d'),
+            "created_at" =>  $this->created_at->format('Y-m-d'),
             "updated_at" =>  $this->updated_at->format('Y-m-d')
         ];
     }

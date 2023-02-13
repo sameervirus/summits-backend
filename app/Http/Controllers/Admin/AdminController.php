@@ -4,10 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
-use Analytics;
-use Spatie\Analytics\Period;
-use App\Classes\GoogleAnalytics;
 use App\Models\Admin\Product\Product;
 use App\Models\Admin\Wproduct;
 use App\Models\Admin\Pproduct;

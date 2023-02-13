@@ -13,9 +13,14 @@ class Brand extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
+    protected $guarded = [];
+
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumbnail')
+              ->fit(Manipulations::FIT_CROP, 120, 120)
+              ->nonQueued();
+        $this->addMediaConversion('cover')
               ->fit(Manipulations::FIT_CROP, 1919, 260)
               ->nonQueued();
     }

@@ -1,0 +1,188 @@
+@import url(//fonts.googleapis.com/earlyaccess/notokufiarabic.css); body {
+    text-align: right;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Noto Kufi Arabic', 'Source Sans Pro', cursive;
+}
+
+.logo {
+    left: 0px;
+    left: 0rem;
+    right: auto;
+}
+
+@media screen and (min-width: 64em) {
+    .header {
+        padding-left: 250px;
+        padding-left: 15.625rem;
+        padding-right: 0px;
+        padding-right: 0rem;
+    }
+}
+
+.shop--navigation .navigation--entry {
+    float: right;
+}
+
+@media screen and (min-width: 64em) {
+    .shop--navigation .entry--language {
+        margin-right: 10px;
+        margin-right: .625rem;
+        margin-left: 0px;
+        margin-left: 0rem;
+    }
+}
+
+@media screen and (min-width: 64em) {
+    .shop--navigation .entry--language .entry--link {
+        float:right;
+        margin: 0rem 1.875rem 0rem 0rem;
+        width: 3.75rem;
+    }
+}
+
+@media screen and (min-width: 78.75em) {
+    .header--social {
+        float: left;
+        margin-left: 5px;
+        margin-left: .3125rem;
+        text-align: left;
+        margin-right: 0;
+    }
+}
+
+.shop--navigation .entry--language .entry--link i {
+    color: #fff;
+    margin-right: 3px;
+    margin-right: .1875rem;
+}
+
+@media screen and (min-width: 64em) {
+    .shop--navigation .entry--language .entry--link:before {
+        margin-right: -2px;
+        margin-left: 0px;
+    }
+}
+
+.navigation-main .navigation--link, .subnavigation--link, .divider--headline, .catalog--label, .spareparts--headline, .btn, .spareparts--title ,h1, .is--fake-h1,h2, .is--fake-h2,h3, .is--fake-h3 {
+    font-family: 'Noto Kufi Arabic', 'Source Sans Pro', cursive;
+    font-style: normal;
+}
+
+.parallaxs {
+    background-position: right;
+}
+
+.text-box h3 {
+    font-family: 'Noto Kufi Arabic', 'Source Sans Pro', cursive;
+    text-align: right;
+}
+
+.text-box p {
+    font-family: 'Noto Kufi Arabic', 'Source Sans Pro', cursive;
+    text-align: right
+}
+
+@media screen and (min-width: 30em) {
+    .footer--nav a {
+        border-left: none;
+        border-right: 1px solid #fff;
+    }
+}
+
+@media screen and (min-width: 30em) {
+    .footer--nav li:first-child a {
+        border-right-width: 0;
+        padding-right: 0px;
+        padding-right: 0rem;
+    }
+}
+
+@media screen and (min-width: 30em) {
+    .footer--nav li:last-child a {
+        padding-left: 0px;
+        padding-left: 0rem;
+        padding-right: 10px;
+        padding-right: .625rem;
+    }
+}
+
+@media screen and (min-width: 64em) {
+    .subnavigation--list {
+        width: auto;
+    }
+}
+
+.content--breadcrumb .breadcrumb--entry, .content--breadcrumb .breadcrumb--separator {
+    float: right;
+}
+
+.content--breadcrumb .breadcrumb--separator {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+/*@media screen and (min-width: 64em) {
+    .product--details .product--infoWrap {
+        float:right;
+        margin-left: 2%;
+        margin-right: 0;
+    }
+}
+
+@media screen and (min-width: 64em) {
+    .product--details .product--image-container {
+        float: left;
+        margin-left: 0px;
+        margin-left: 0rem;
+    }
+}*/
+.navigation-main .navigation--trigger {
+    float: right
+}
+
+.rd-navbar-fixed .rd-navbar-nav-wrap {
+    -webkit-transform: translateX(105%);
+    transform: translateX(105%);
+    position: absolute;
+    width: 100%;
+    top: 125px;
+}
+
+.rd-navbar-fixed .rd-navbar-nav {
+    text-align: right;
+}
+
+.rd-navbar-fixed .rd-navbar-submenu-toggle {
+    left: 0;
+    right: auto;
+}
+
+.rd-navbar-fixed .rd-navbar-submenu-toggle:before {
+    content: "\f104";
+}
+
+.products .html--title {
+    font-style: normal;
+    line-height: 1.5;
+}
+
+#six--framemenu .framemenu--list-item-link {
+    text-align: right;
+}
+
+#six--framemenu .framemenu--list-item-link.link-row-desktop--1 {
+    padding-left: 20px;
+    padding-left: 1.25rem;
+    padding-right: 10px;
+    padding-right: .625rem;
+}
+
+#six--framemenu .framemenu--list-item-link:after {
+    left: 0;
+    right: auto;
+    content: "\f104";
+}

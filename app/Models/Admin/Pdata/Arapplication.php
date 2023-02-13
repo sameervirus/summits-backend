@@ -1,6 +1,6 @@
 <?php
 
-namespace s\Admin\Pdata;
+namespace App\Models\Admin\Pdata;
 
 use Illuminate\Database\Eloquent\Model;
 

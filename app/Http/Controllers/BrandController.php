@@ -47,7 +47,7 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        return new BrandResource($brand);
+        return $brand->getMedia('logos');
     }
 
     /**

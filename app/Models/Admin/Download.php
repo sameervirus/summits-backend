@@ -1,6 +1,6 @@
 <?php
 
-namespace s\Admin;
+namespace App\Models\Admin;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\Models\Media;
