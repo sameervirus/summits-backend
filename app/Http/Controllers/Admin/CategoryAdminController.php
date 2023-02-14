@@ -48,7 +48,10 @@ class CategoryAdminController extends Controller
             'name' => ['required', 'string', 'max:255', 'unique:'. Category::class],
         ]);
 
+        // return $request->all();
+
         try {
+
             DB::beginTransaction();
             $data = $request->except(['_token', 'image']);
             $data['slug'] = Str::slug($request->name);
@@ -88,7 +91,7 @@ class CategoryAdminController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('admin.brands.edit', ['item' => $category]);
+        return view('admin.categories.edit', ['item' => $category, 'title' => 'Category']);
     }
 
     /**
@@ -103,6 +106,13 @@ class CategoryAdminController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('categories')->ignore($category->id)],
         ]);
+
+        if($category->childs->count() > 0 && $request->parent_id != null) {
+            flash('This parent is a child parent must haven\'t a parent')->overlay()->error();
+            return redirect()->back()->withInput();
+        }
+
+
 
         try {
             DB::beginTransaction();
@@ -136,6 +146,10 @@ class CategoryAdminController extends Controller
      */
     public function destroy(Category $category)
     {
+        if($category->childs()->count() > 0) {
+            flash('This parent have child/s category must haven\'t a child/s to delete')->overlay()->error();
+            return redirect()->back();
+        }
         if($category->delete())
         {
             flash('Successfully Deleted')->overlay();

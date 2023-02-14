@@ -14,10 +14,12 @@
     <label for="website" class="col-md-2 control-label">Parent</label>
 
     <div class="col-md-10">
-    <select class="form-control" id="type" name="parent_id" required>
-            <option value="null">No parent</option>
+    <select class="form-control" id="type" name="parent_id">
+            <option value="">No parent</option>
             @foreach(\App\Models\Category::all() as $category)
-            <option value="{{$category->id}}" {{ @$item && $item->parent_id == $category->id ? 'selected' : '' }}>{{ $category->name }} - {{ $category->name_arabic }}</option>
+            @continue($category->parent_id)
+            @continue($category->id === @$item->id)
+            <option value="{{$category->id}}" {{ @$item && ($item->parent_id == $category->id || old('parent_id') == $category->id)  ? 'selected' : '' }}>{{ $category->name }} - {{ $category->name_arabic }}</option>
             @endforeach
         </select>
     </div>

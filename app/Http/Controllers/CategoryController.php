@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Categories\CategoriesResources;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return CategoriesResources::collection(Category::whereNull('parent_id')->with('childs')->get());
     }
 
     /**

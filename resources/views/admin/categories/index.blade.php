@@ -92,7 +92,7 @@
                                         </td>
                                         <td class="name">{{ $item->name }}</td>
                                         <td class="name">{{ $item->name_arabic }}</td>
-                                        <td class="name">{{ $item->parent->name }}</td>
+                                        <td class="name">{{ $item->parent?->name }}</td>
                                         <td class="">
                                             <a href="{{route('admin.categories.edit', ['category' => $item->id] ) }}" data-id="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                             <a href="" onclick="event.preventDefault(); document.getElementById('del_{{$item->id}}').click();"
