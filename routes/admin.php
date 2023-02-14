@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\Admin\BrandAdminController;
+use App\Http\Controllers\Admin\CategoryAdminController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SiteContent\SitecontentController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
 
     Route::resource("brands", BrandAdminController::class, [
+        'as' => 'admin'
+    ]);
+
+    Route::resource("categories", CategoryAdminController::class, [
         'as' => 'admin'
     ]);
 

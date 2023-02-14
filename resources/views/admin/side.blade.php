@@ -41,6 +41,7 @@
 			<li><a><i class="fa fa-desktop"></i>Dynamic Pages<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{{route('admin.brands.index')}}">Brands</a></li>
+                    <li><a href="{{route('admin.categories.index')}}">Categories</a></li>
                     <li><a href="{{route('feedbacks.index')}}">رسائل الموقع</a></li>
                 </ul>
             </li>
