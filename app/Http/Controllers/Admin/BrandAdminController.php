@@ -41,8 +41,9 @@ class BrandAdminController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:'. Brand::class],
-            'description' => ['required', 'string'],
+            'name_english' => ['required', 'string', 'max:255', 'unique:'. Brand::class],
+            'name_arabic' => ['required', 'string'],
+            'description_english' => ['required', 'string'],
             'description_arabic' => ['required', 'string'],
         ]);
 
@@ -50,7 +51,7 @@ class BrandAdminController extends Controller
             DB::beginTransaction();
             $data = $request->except(['_token', 'logo', 'banner']);
             $data['is_active'] = $request->is_active == 'on' ? true : false;
-            $data['slug'] = Str::slug($request->name);
+            $data['slug'] = Str::slug($request->name_english);
             $brand = Brand::create($data);
 
             DB::commit();
@@ -102,8 +103,9 @@ class BrandAdminController extends Controller
     public function update(Request $request, Brand $brand)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255', Rule::unique('brands')->ignore($brand->id)],
-            'description' => ['required', 'string'],
+            'name_english' => ['required', 'string', 'max:255', Rule::unique('brands')->ignore($brand->id)],
+            'name_arabic' => ['required', 'string'],
+            'description_english' => ['required', 'string'],
             'description_arabic' => ['required', 'string'],
         ]);
 
@@ -111,7 +113,7 @@ class BrandAdminController extends Controller
             DB::beginTransaction();
             $data = $request->except(['_token', 'logo', 'banner']);
             $data['is_active'] = $request->is_active == 'on' ? true : false;
-            $data['slug'] = Str::slug($request->name);
+            $data['slug'] = Str::slug($request->name_english);
             $brand->update($data);
 
             DB::commit();

@@ -1,8 +1,8 @@
 <div class="form-group">
-    <label for="name" class="col-md-2 control-label">الاسم*</label>
+    <label for="name_english" class="col-md-2 control-label">الاسم*</label>
 
     <div class="col-md-5">
-        <input id="name" type="text" class="form-control" name="name" required placeholder="Name" value="{{ $item->name ?? '' }}">
+        <input id="name_english" type="text" class="form-control" name="name_english" required placeholder="Name" value="{{ $item->name_english ?? '' }}">
     </div>
     <div class="col-md-5">
         <input type="text" class="form-control" name="name_arabic"  value="{{ $item->name_arabic ?? '' }}" required placeholder="اسم">
@@ -19,7 +19,7 @@
             @foreach(\App\Models\Category::all() as $category)
             @continue($category->parent_id)
             @continue($category->id === @$item->id)
-            <option value="{{$category->id}}" {{ @$item && ($item->parent_id == $category->id || old('parent_id') == $category->id)  ? 'selected' : '' }}>{{ $category->name }} - {{ $category->name_arabic }}</option>
+            <option value="{{$category->id}}" {{ @$item && ($item->parent_id == $category->id || old('parent_id') == $category->id)  ? 'selected' : '' }}>{{ $category->name_english }} - {{ $category->name_arabic }}</option>
             @endforeach
         </select>
     </div>

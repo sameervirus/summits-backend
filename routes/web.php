@@ -25,7 +25,7 @@ Route::get('/', function(){
     ];
 });
 
-Route::get('/login', [AuthController::class, 'index']);
+Route::get('/login', [AuthController::class, 'index'])->name('admin.login');
 Route::post('/login', [AuthController::class, 'store'])
                 ->middleware('guest')
                 ->name('web-login');

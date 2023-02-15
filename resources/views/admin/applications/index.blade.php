@@ -70,7 +70,7 @@
                     </div>
                     <div class="x_content">
                         <p>
-                            <a href="{{route('admin.categories.create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add {{ $title }}</a>
+                            <a href="{{route('admin.applications.create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add {{ $title }}</a>
                         </p>
                         <div class="table-responsive">
                             <table class="table table-striped jambo_table">
@@ -94,12 +94,12 @@
                                         <td class="name">{{ $item->name_arabic }}</td>
                                         <td class="name">{{ $item->parent?->name_english }}</td>
                                         <td class="">
-                                            <a href="{{route('admin.categories.edit', ['category' => $item->id] ) }}" data-id="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                            <a href="{{route('admin.applications.edit', ['application' => $item->id] ) }}" data-id="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                             <a href="" onclick="event.preventDefault(); document.getElementById('del_{{$item->id}}').click();"
                                                 class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
                                             <form
                                                 method="POST"
-                                                action="{{ route('admin.categories.destroy' , ['category' => $item ]) }}"
+                                                action="{{ route('admin.applications.destroy' , ['application' => $item ]) }}"
                                                 onsubmit="return confirm('هل تريد حقاً حذف هذا العنصر?');">
                                                 {{ csrf_field() }} {{ method_field('DELETE') }}
                                                <button type="submit" class="hidden" id="del_{{$item->id}}">Delete</button>

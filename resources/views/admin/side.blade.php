@@ -20,12 +20,7 @@
 
             <li><a><i class="fa fa-home"></i>Home Page<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    @if(Request::getHost() == 'www.lavor-egypt.com')
-                    <li><a href="{{route('pages.video')}}">Video Slider</a></li>
-                    @endif
-                    @if(Request::getHost() == 'www.wortex-egypt.com')
-                    <li><a href="{{route('slider.index')}}">Main Slider</a></li>
-                    @endif
+                    <li><a href="{{route('admin.banners.index')}}">Slider and Banners</a></li>
 				</ul>
             </li>
 
@@ -42,6 +37,8 @@
                 <ul class="nav child_menu">
                     <li><a href="{{route('admin.brands.index')}}">Brands</a></li>
                     <li><a href="{{route('admin.categories.index')}}">Categories</a></li>
+                    <li><a href="{{route('admin.tags.index')}}">Tags</a></li>
+                    <li><a href="{{route('admin.applications.index')}}">Applications</a></li>
                     <li><a href="{{route('feedbacks.index')}}">رسائل الموقع</a></li>
                 </ul>
             </li>

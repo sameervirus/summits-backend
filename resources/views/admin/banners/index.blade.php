@@ -50,6 +50,47 @@
             </div>
         @endif
         <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Position <small></small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <p>
+                            <a href="{{ route('admin.banners.create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add Item </a>
+                        </p>
+                        <form class="form-horizontal form-label-left">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12 text-right">Select Position</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                  <select class="form-control" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                                    <option>Choose Position</option>
+                                    @foreach($positions as $position)
+                                    <option value="{{route('admin.banners.show', $position)}}"
+                                        {{ @$items && $items->first()->position == $position ? 'selected' : '' }}>
+                                        {{ \Str::title(str_replace('_', ' ', $position)) }}
+                                    </option>
+                                    @endforeach
+                                  </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
 
         @if(@$items)
         <div class="row">
@@ -70,7 +111,7 @@
                     </div>
                     <div class="x_content">
                         <p>
-                            <a href="{{route('admin.categories.create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add {{ $title }}</a>
+                            <a href="{{route('admin.tags.create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add {{ $title }}</a>
                         </p>
                         <div class="table-responsive">
                             <table class="table table-striped jambo_table">
@@ -94,12 +135,12 @@
                                         <td class="name">{{ $item->name_arabic }}</td>
                                         <td class="name">{{ $item->parent?->name_english }}</td>
                                         <td class="">
-                                            <a href="{{route('admin.categories.edit', ['category' => $item->id] ) }}" data-id="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                            <a href="{{route('admin.tags.edit', ['tag' => $item->id] ) }}" data-id="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                             <a href="" onclick="event.preventDefault(); document.getElementById('del_{{$item->id}}').click();"
                                                 class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
                                             <form
                                                 method="POST"
-                                                action="{{ route('admin.categories.destroy' , ['category' => $item ]) }}"
+                                                action="{{ route('admin.tags.destroy' , ['tag' => $item ]) }}"
                                                 onsubmit="return confirm('هل تريد حقاً حذف هذا العنصر?');">
                                                 {{ csrf_field() }} {{ method_field('DELETE') }}
                                                <button type="submit" class="hidden" id="del_{{$item->id}}">Delete</button>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Image\Manipulations;
@@ -13,6 +14,7 @@ class Category extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $guarded = [];
+    protected $appends = ['name'];
 
     public function registerMediaConversions(Media $media = null): void
     {
@@ -28,5 +30,10 @@ class Category extends Model implements HasMedia
 
     public function childs() {
         return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    public function getNameAttribute()
+    {
+        return App::getLocale() == 'ar' ? $this->name_arabic : $this->name_english;
     }
 }

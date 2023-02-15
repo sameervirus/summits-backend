@@ -11,21 +11,22 @@
 |
 */
 
+use App\Http\Controllers\Admin\ApplicationAdminController;
+use App\Http\Controllers\Admin\BannerAdminController;
 use App\Http\Controllers\Admin\BrandAdminController;
 use App\Http\Controllers\Admin\CategoryAdminController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SiteContent\SitecontentController;
+use App\Http\Controllers\Admin\TagAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
 
-    Route::resource("brands", BrandAdminController::class, [
-        'as' => 'admin'
-    ]);
-
-    Route::resource("categories", CategoryAdminController::class, [
-        'as' => 'admin'
-    ]);
+    Route::resource("brands", BrandAdminController::class, ['as' => 'admin']);
+    Route::resource("categories", CategoryAdminController::class, ['as' => 'admin']);
+    Route::resource("tags", TagAdminController::class, ['as' => 'admin']);
+    Route::resource("applications", ApplicationAdminController::class, ['as' => 'admin']);
+    Route::resource("banners", BannerAdminController::class, ['as' => 'admin']);
 
 
     Route::get("/", [SitecontentController::class, 'index']);

@@ -90,7 +90,7 @@
                                         <td class="a-center ">
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td class="name">{{ $brand->name }}</td>
+                                        <td class="name">{{ $brand->name_english }}</td>
                                         <td class="name">{{ $brand->name_arabic }}</td>
                                         <td class="">
                                             <a href="{{route('admin.brands.edit', ['brand' => $brand->id] ) }}" data-id="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>

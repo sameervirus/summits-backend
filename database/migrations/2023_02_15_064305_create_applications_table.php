@@ -13,18 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('brands', function (Blueprint $table) {
+        Schema::create('applications', function (Blueprint $table) {
             $table->id();
+            $table->string('slug');
             $table->string('name_english');
             $table->string('name_arabic');
-            $table->string('slug');
-            $table->string('website')->nullable();
-            $table->string('phone')->nullable();
-            $table->text('address_english')->nullable();
-            $table->text('address_arabic')->nullable();
-            $table->text('description_english');
-            $table->text('description_arabic');
-            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -36,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brands');
+        Schema::dropIfExists('applications');
     }
 };

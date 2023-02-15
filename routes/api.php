@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +32,8 @@ Route::get('governorates', [CommonController::class, 'governorates']);
 Route::get('cities', [CommonController::class, 'cities']);
 Route::resource('brands', BrandController::class)->scoped(['brand' => 'slug']);
 Route::resource('categories', CategoryController::class)->scoped(['category' => 'slug']);
+Route::resource('tags', TagController::class)->scoped(['tag' => 'slug']);
+Route::resource('applications', ApplicationController::class)->scoped(['application' => 'slug']);
 
 Route::get('fake/{file}', function()
 {

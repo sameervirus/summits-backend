@@ -45,7 +45,8 @@ class CategoryAdminController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:'. Category::class],
+            'name_english' => ['required', 'string', 'max:255', 'unique:'. Category::class],
+            'name_arabic' => ['required', 'string', 'max:255',],
         ]);
 
         // return $request->all();
@@ -54,7 +55,7 @@ class CategoryAdminController extends Controller
 
             DB::beginTransaction();
             $data = $request->except(['_token', 'image']);
-            $data['slug'] = Str::slug($request->name);
+            $data['slug'] = Str::slug($request->name_english);
             $item = Category::create($data);
 
             DB::commit();
@@ -104,7 +105,8 @@ class CategoryAdminController extends Controller
     public function update(Request $request, Category $category)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255', Rule::unique('categories')->ignore($category->id)],
+            'name_english' => ['required', 'string', 'max:255', Rule::unique('categories')->ignore($category->id)],
+            'name_arabic' => ['required', 'string', 'max:255',],
         ]);
 
         if($category->childs->count() > 0 && $request->parent_id != null) {
@@ -117,7 +119,7 @@ class CategoryAdminController extends Controller
         try {
             DB::beginTransaction();
             $data = $request->except(['_token', 'image']);
-            $data['slug'] = Str::slug($request->name);
+            $data['slug'] = Str::slug($request->name_english);
             $category->update($data);
 
             DB::commit();
