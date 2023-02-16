@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommonController;
@@ -34,6 +35,7 @@ Route::resource('brands', BrandController::class)->scoped(['brand' => 'slug']);
 Route::resource('categories', CategoryController::class)->scoped(['category' => 'slug']);
 Route::resource('tags', TagController::class)->scoped(['tag' => 'slug']);
 Route::resource('applications', ApplicationController::class)->scoped(['application' => 'slug']);
+Route::resource('banners', BannerController::class);
 
 Route::get('fake/{file}', function()
 {

@@ -19,20 +19,20 @@
     <label for="title_english" class="col-md-2 control-label">العنوان*</label>
 
     <div class="col-md-5">
-        <input id="title_english" type="text" class="form-control" name="title_english" required placeholder="Title" value="{{ $item->title_english ?? '' }}">
+        <input id="title_english" type="text" class="form-control" name="title_english" required placeholder="Title" value="{{old('title_english', @$item->title_english)}}">
     </div>
     <div class="col-md-5">
-        <input type="text" class="form-control" name="title_arabic"  value="{{ $item->title_arabic ?? '' }}" required placeholder="العنوان">
+        <input type="text" class="form-control" name="title_arabic"  value="{{old('title_arabic', @$item->title_arabic)}}" required placeholder="العنوان">
     </div>
 </div>
 <div class="form-group">
     <label for="description_english" class="col-md-2 control-label">العنوان الفرعي</label>
 
     <div class="col-md-5">
-        <input id="description_english" type="text" class="form-control" name="description_english" placeholder="Sub Title" value="{{ $item->description_english ?? '' }}">
+        <input id="description_english" type="text" class="form-control" name="description_english" placeholder="Sub Title" value="{{old('description_english', @$item->description_english)}}">
     </div>
     <div class="col-md-5">
-        <input type="text" class="form-control" name="description_arabic"  value="{{ $item->description_arabic ?? '' }}" placeholder="العنوان الفرعي">
+        <input type="text" class="form-control" name="description_arabic"  value="{{old('description_arabic', @$item->description_arabic)}}" placeholder="العنوان الفرعي">
     </div>
 </div>
 
@@ -40,10 +40,10 @@
     <label for="btnText_english" class="col-md-2 control-label">نص الزر</label>
 
     <div class="col-md-5">
-        <input id="btnText_english" type="text" class="form-control" name="btnText_english" placeholder="btnText" value="{{ $item->btnText_english ?? '' }}">
+        <input id="btnText_english" type="text" class="form-control" name="btnText_english" placeholder="btnText" value="{{old('btnText_english', @$item->btnText_english)}}">
     </div>
     <div class="col-md-5">
-        <input type="text" class="form-control" name="btnText_arabic"  value="{{ $item->btnText_arabic ?? '' }}">
+        <input type="text" class="form-control" name="btnText_arabic"  value="{{old('btnText_arabic', @$item->btnText_arabic)}}">
     </div>
 </div>
 
@@ -51,12 +51,12 @@
     <label for="slug" class="col-md-2 control-label">Url*</label>
 
     <div class="col-md-5">
-        <input id="slug" type="text" class="form-control" name="slug" placeholder="url" value="{{ $item->slug ?? '' }}">
+        <input id="slug" type="text" class="form-control" name="slug" placeholder="url" value="{{old('slug', @$item->slug)}}">
         <p class="help-block">like /search</p>
     </div>
     <label for="order" class="col-md-1 control-label">Order</label>
     <div class="col-md-4">
-        <input id="order" type="number" class="form-control" name="order" placeholder="order for hero" value="{{ $item->order ?? '' }}">
+        <input id="order" type="number" class="form-control" name="order" placeholder="order for hero" value="{{old('order', @$item->order)}}">
         <p class="help-block">like /search</p>
     </div>
 </div>
@@ -67,7 +67,7 @@
     <div class="col-md-10">
         <input id="banner" type="file" class="form-control" name="banner" accept="images/*" {{ @$item ? '' : 'required'}}>
         <p class="help-block">hero = 1740x562</p>
-        <p class="help-block">icons = 190x59</p>
+        <p class="help-block">icons = 190x190</p>
         <p class="help-block">banner1 = 840x240</p>
         <p class="help-block">banner2 = 1130x240</p>
     </div>

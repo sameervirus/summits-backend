@@ -17,9 +17,9 @@ class Banner extends Model implements HasMedia
     protected $appends = ['title', 'description', 'btnText'];
 
 
-    public function getNameAttribute()
+    public function getTitleAttribute()
     {
-        return App::getLocale() == 'ar' ? $this->name_arabic : $this->name_english;
+        return App::getLocale() == 'ar' ? $this->title_arabic : $this->title_english;
     }
 
     public function getDescriptionAttribute()
@@ -45,18 +45,13 @@ class Banner extends Model implements HasMedia
             ->nonQueued();
 
         $this->addMediaConversion('banner2')
-            ->performOnCollections('banner2d')
+            ->performOnCollections('banner2')
             ->fit(Manipulations::FIT_CROP, 1130, 240)
-            ->nonQueued();
-
-        $this->addMediaConversion('banner2')
-            ->performOnCollections('banner2m')
-            ->fit(Manipulations::FIT_CROP, 1050, 240)
             ->nonQueued();
 
         $this->addMediaConversion('icons')
             ->performOnCollections('icons')
-            ->fit(Manipulations::FIT_CROP, 190, 59)
+            ->fit(Manipulations::FIT_CROP, 190, 190)
             ->nonQueued();
     }
 }

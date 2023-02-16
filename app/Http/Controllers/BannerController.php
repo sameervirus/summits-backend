@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BannerResource;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 
@@ -44,9 +45,9 @@ class BannerController extends Controller
      * @param  \App\Models\Banner  $banner
      * @return \Illuminate\Http\Response
      */
-    public function show(Banner $banner)
+    public function show($position)
     {
-        //
+        return BannerResource::collection(Banner::where('position', $position)->get());
     }
 
     /**

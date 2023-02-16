@@ -78,7 +78,7 @@
                                     <option>Choose Position</option>
                                     @foreach($positions as $position)
                                     <option value="{{route('admin.banners.show', $position)}}"
-                                        {{ @$items && $items->first()->position == $position ? 'selected' : '' }}>
+                                        {{ @$items && @$items->first()->position == $position ? 'selected' : '' }}>
                                         {{ \Str::title(str_replace('_', ' ', $position)) }}
                                     </option>
                                     @endforeach
@@ -111,16 +111,16 @@
                     </div>
                     <div class="x_content">
                         <p>
-                            <a href="{{route('admin.tags.create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add {{ $title }}</a>
+                            <a href="{{route('admin.banners.create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Add {{ $title }}</a>
                         </p>
                         <div class="table-responsive">
                             <table class="table table-striped jambo_table">
                                 <thead>
                                     <tr class="headings">
                                         <th>No.</th>
-                                        <th class="column-title">Name</th>
-                                        <th class="column-title">الاسم</th>
-                                        <th class="column-title">Parent</th>
+                                        <th class="column-title">Title</th>
+                                        <th class="column-title">العنوان</th>
+                                        <th class="column-title">Url</th>
                                         <th class="column-title no-link last"><span class="nobr">Action</span>
                                         </th>
                                     </tr>
@@ -131,16 +131,16 @@
                                         <td class="a-center ">
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td class="name">{{ $item->name_english }}</td>
-                                        <td class="name">{{ $item->name_arabic }}</td>
-                                        <td class="name">{{ $item->parent?->name_english }}</td>
+                                        <td class="name">{{ $item->title_english }}</td>
+                                        <td class="name">{{ $item->title_arabic }}</td>
+                                        <td class="name">{{ $item->slug }}</td>
                                         <td class="">
-                                            <a href="{{route('admin.tags.edit', ['tag' => $item->id] ) }}" data-id="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                                            <a href="{{route('admin.banners.edit', ['banner' => $item->id] ) }}" data-id="" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                                             <a href="" onclick="event.preventDefault(); document.getElementById('del_{{$item->id}}').click();"
                                                 class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
                                             <form
                                                 method="POST"
-                                                action="{{ route('admin.tags.destroy' , ['tag' => $item ]) }}"
+                                                action="{{ route('admin.banners.destroy' , ['banner' => $item ]) }}"
                                                 onsubmit="return confirm('هل تريد حقاً حذف هذا العنصر?');">
                                                 {{ csrf_field() }} {{ method_field('DELETE') }}
                                                <button type="submit" class="hidden" id="del_{{$item->id}}">Delete</button>

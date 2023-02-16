@@ -91,11 +91,17 @@
                             class="form-horizontal"
                             role="form"
                             method="POST"
-                            action="{{route('admin.banners.update', $item ) }}">
+                            action="{{route('admin.banners.update', $item ) }}"
+                            enctype="multipart/form-data">
                             {{ method_field('PUT') }}
                         @else
 
-                        <form class="form-horizontal" role="form" method="POST" action="{{route('admin.banners.store')}}">
+                        <form
+                            class="form-horizontal"
+                            role="form"
+                            method="POST"
+                            action="{{route('admin.banners.store')}}"
+                            enctype="multipart/form-data">
 
                         @endif
 
@@ -107,6 +113,17 @@
                             <button type="submit" class="btn btn-primary">Save</button>
 
                         </form>
+                        @if(@$item && count($item->getMedia($item->position)) > 0)
+                        @foreach($item->getMedia($item->position) as $image)
+                            <div class="col-md-3 img-frame well float-right" style="float: right;margin-top: -150px;">
+                            <div class="thumbnail">
+                                <div class="image view view-first">
+                                    <img src="{{$image->getUrl()}}"  style="width: 100%;">
+                                </div>
+                            </div>
+                            </div>
+                        @endforeach
+                        @endif
                         </div>
                     </div>
                 </div>
