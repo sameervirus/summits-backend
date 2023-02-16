@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Product\Product;
-use App\Models\Admin\Wproduct;
-use App\Models\Admin\Pproduct;
-use App\Models\Admin\Post;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -56,39 +53,6 @@ class AdminController extends Controller
     public function delimg(Request $request)
     {
         $product = Product::findOrFail($request->id);
-
-        $product->deleteMedia($request->imgs);
-
-        flash('Successfully Deleted')->success();
-
-        return 'ok';
-    }
-
-    public function wdelimg(Request $request)
-    {
-        $product = Wproduct::findOrFail($request->id);
-
-        $product->deleteMedia($request->imgs);
-
-        flash('Successfully Deleted')->success();
-
-        return 'ok';
-    }
-
-    public function delimgpost(Request $request)
-    {
-        $product = Post::findOrFail($request->id);
-
-        $product->deleteMedia($request->imgs);
-
-        flash('Successfully Deleted')->success();
-
-        return 'ok';
-    }
-
-    public function pdelimg(Request $request)
-    {
-        $product = Pproduct::findOrFail($request->id);
 
         $product->deleteMedia($request->imgs);
 

@@ -11,11 +11,13 @@
 |
 */
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ApplicationAdminController;
 use App\Http\Controllers\Admin\BannerAdminController;
 use App\Http\Controllers\Admin\BrandAdminController;
 use App\Http\Controllers\Admin\CategoryAdminController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\SiteContent\SitecontentController;
 use App\Http\Controllers\Admin\TagAdminController;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +29,8 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
     Route::resource("tags", TagAdminController::class, ['as' => 'admin']);
     Route::resource("applications", ApplicationAdminController::class, ['as' => 'admin']);
     Route::resource("banners", BannerAdminController::class, ['as' => 'admin']);
-
+    Route::resource("products", ProductAdminController::class, ['as' => 'admin']);
+    Route::post("/delimg", [AdminController::class, "delimg"])->name("delimg");
 
     Route::get("/", [SitecontentController::class, 'index']);
 
@@ -35,7 +38,7 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
     Route::post("/preorder", "Admin\AdminController@preorder")->name(
         "preorder"
     );
-    Route::post("/delimg", "Admin\AdminController@delimg")->name("delimg");
+
     Route::post("/delimgpost", "Admin\AdminController@delimgpost")->name(
         "delimg_post"
     );

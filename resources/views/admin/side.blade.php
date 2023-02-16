@@ -35,6 +35,7 @@
 
 			<li><a><i class="fa fa-desktop"></i>Dynamic Pages<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
+                    <li><a href="{{route('admin.products.index')}}">Products</a></li>
                     <li><a href="{{route('admin.brands.index')}}">Brands</a></li>
                     <li><a href="{{route('admin.categories.index')}}">Categories</a></li>
                     <li><a href="{{route('admin.tags.index')}}">Tags</a></li>
