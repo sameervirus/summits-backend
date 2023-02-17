@@ -4,6 +4,7 @@
 
 @section ('cssFiles')
 <link rel="stylesheet" href="{{asset('vendors/bootstrap-multiselect/dist/css/bootstrap-multiselect.css')}}" type="text/css"/>
+<link rel="stylesheet" href="{{asset('vendors/select2/dist/css/select2.min.css')}}" type="text/css"/>
     <style type="text/css">
       .inputfile {
         width: 0.1px;
@@ -30,6 +31,7 @@
         cursor: pointer; /* "hand" cursor */
       }
       .thumbnail .image {min-height: 120px!important;}
+      .red {color: red;}
     </style>
 @endsection
 
@@ -132,6 +134,7 @@
                             <p></p>
                             <div class="tools tools-bottom">
                                 <a href="#" class="image_delete" data-img="{{$image->id}}"><i class="fa fa-times"></i></a>
+                                <a href="#" class="image_favorite" data-img="{{$image->id}}"><i class="fa fa-star {{ $image->hasCustomProperty('fav') ? 'red': ''}}"></i></a>
                             </div>
                             </div>
                         </div>
@@ -151,6 +154,7 @@
 
     <!-- iCheck -->
     <script src="{{asset('vendors/iCheck/icheck.min.js')}}"></script>
+    <script src="{{asset('vendors/select2/dist/js/select2.min.js')}}"></script>
 
     @if(@$item)
     <script>
@@ -169,7 +173,34 @@
           });
         }
       });
+      $("body").on("click",".image_favorite",function (e) {
+        e.preventDefault();
+        if (confirm('Are you sure ?')) {
+          var img = $(this).data('img');
+          var i = $(this).children('i');
+
+          $.post("{{route('favimg')}}",{_token:"{{ csrf_token() }}",id: "{{ $item->id }}", imgs: img }).done(function( data ) {
+            if (data == 'ok') {
+                $('.image_favorite .fa').each(function() {
+                    $(this).removeClass('red');
+                });
+                i.addClass('red');
+
+                alert ("Done");
+            } else {
+                alert ("Server is down please try again");
+            }
+          });
+        }
+      });
     </script>
     @endif
 
+    <script>
+        $(document).ready(function() {
+            $('#applications').select2();
+            $('#categories').select2();
+            $('#tags').select2();
+        });
+    </script>
 @endsection

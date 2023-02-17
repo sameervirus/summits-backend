@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -34,7 +38,11 @@ class ProductAdminController extends Controller
         $brands = Brand::all();
         $title = 'Product';
         $titles = 'Products';
-        return view('admin.products.edit', compact('title', 'titles', 'brands'));
+        $categories = Category::all();
+        $tags = Tag::all();
+        $applications = Application::all();
+
+        return view('admin.products.edit', compact('title', 'titles', 'brands', 'categories', 'tags', 'applications'));
     }
 
     /**
@@ -54,9 +62,10 @@ class ProductAdminController extends Controller
             'brand_id' => ['required', 'integer', 'max:255',],
         ]);
 
-        try {
 
-            $data = $request->except(['_token', 'images']);
+        try {
+            DB::beginTransaction();
+            $data = $request->except(['_token', 'images', 'applications', 'categories', 'tags']);
             $data['slug'] = Str::slug($request->name_english);
             $product = Product::create($data);
 
@@ -67,8 +76,15 @@ class ProductAdminController extends Controller
                     });
             }
 
+            if($request->has('applications')) $product->applications()->attach($request->applications);
+            if($request->has('categories')) $product->categories()->attach($request->categories);
+            if($request->has('tags')) $product->tags()->attach($request->tags);
+
+            DB::commit();
+
             flash('Successfully Added')->overlay()->success();
         } catch (\Throwable $th) {
+            DB::rollback();
             return $th;
         }
 
@@ -101,8 +117,15 @@ class ProductAdminController extends Controller
         $title = 'Product';
         $titles = 'Products';
         $brands = Brand::all();
+        $categories = Category::all();
+        $tags = Tag::all();
+        $applications = Application::all();
         $item = $product;
-        return view('admin.products.edit', compact('item','title', 'titles', 'brands'));
+        $pa = $product->applications->pluck('id')->toArray();
+        $pc = $product->categories->pluck('id')->toArray();
+        $pt = $product->tags->pluck('id')->toArray();
+        return view('admin.products.edit', compact('item','title', 'titles',
+                    'brands', 'pa', 'pc', 'pt', 'categories', 'tags', 'applications'));
     }
 
     /**
@@ -124,20 +147,29 @@ class ProductAdminController extends Controller
         ]);
 
         try {
-
-            $data = $request->except(['_token', 'images']);
+            DB::beginTransaction();
+            $data = $request->except(['_token', 'images', 'applications', 'categories', 'tags']);
             $data['slug'] = Str::slug($request->name_english);
             $product->update($data);
 
+            $p = Product::find($product->id);
+
+            $p->applications()->sync($request->applications);
+            $p->categories()->sync($request->categories);
+            $p->tags()->sync($request->tags);
+
             if ($request->hasFile('images')) {
-                $fileAdders = $product->addMultipleMediaFromRequest(['images'])
+                $p->addMultipleMediaFromRequest(['images'])
                     ->each(function ($fileAdder) {
                         $fileAdder->toMediaCollection('images');
                     });
             }
 
+            DB::commit();
+
             flash('Successfully Added')->overlay()->success();
         } catch (\Throwable $th) {
+            DB::rollback();
             return $th;
         }
 

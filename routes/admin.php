@@ -31,6 +31,7 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
     Route::resource("banners", BannerAdminController::class, ['as' => 'admin']);
     Route::resource("products", ProductAdminController::class, ['as' => 'admin']);
     Route::post("/delimg", [AdminController::class, "delimg"])->name("delimg");
+    Route::post("/favimg", [AdminController::class, "favimg"])->name("favimg");
 
     Route::get("/", [SitecontentController::class, 'index']);
 

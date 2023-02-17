@@ -19,7 +19,7 @@ class Product extends Model implements HasMedia
 
     public function getNameAttribute()
     {
-        return App::getLocale() == 'ar' ? $this->title_arabic : $this->title_english;
+        return App::getLocale() == 'ar' ? $this->name_arabic : $this->name_english;
     }
 
     public function getDescriptionAttribute()
@@ -42,15 +42,15 @@ class Product extends Model implements HasMedia
     }
 
     public function categories() {
-        return $this->hasMany(Category::class);
+        return $this->belongsToMany(Category::class);
     }
 
     public function tags() {
-        return $this->hasMany(Tag::class);
+        return $this->belongsToMany(Tag::class);
     }
 
     public function applications() {
-        return $this->hasMany(Application::class);
+        return $this->belongsToMany(Application::class);
     }
 
 }

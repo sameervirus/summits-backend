@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class AdminController extends Controller
 {
@@ -56,7 +57,23 @@ class AdminController extends Controller
 
         $product->deleteMedia($request->imgs);
 
-        flash('Successfully Deleted')->success();
+        return 'ok';
+    }
+
+    public function favimg(Request $request)
+    {
+        $product = Product::findOrFail($request->id);
+        foreach($product->getMedia('images') as $item)
+        {
+            $item->forgetCustomProperty('fav');
+            $item->save();
+        }
+
+        $image = Media::find($request->imgs);
+
+        $image->setCustomProperty('fav', true);
+
+        $image->save();
 
         return 'ok';
     }
