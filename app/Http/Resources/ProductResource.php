@@ -34,7 +34,7 @@ class ProductResource extends JsonResource
                 'original' => $this->getMedia('images')->where('custom_properties.fav', true)->first()->getFullUrl('original'),
                 'thumbnail' => $this->getMedia('images')->where('custom_properties.fav', true)->first()->getFullUrl('thumbnail'),
             ],
-            'gallery' => ProductGalleryResource::collection($this->getMedia('images')->where('custom_properties.fav', false))
+            'gallery' => ProductGalleryResource::collection($this->getMedia('images'))
         ];
     }
 }
