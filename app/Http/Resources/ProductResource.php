@@ -30,9 +30,9 @@ class ProductResource extends JsonResource
             'product_type' => $this->product_type,
             'tag' => $this->tags,
             'image' => [
-                'id' => $this->getMedia('images')->where('custom_properties.fav', true)->first()->id,
-                'original' => $this->getMedia('images')->where('custom_properties.fav', true)->first()->getFullUrl('original'),
-                'thumbnail' => $this->getMedia('images')->where('custom_properties.fav', true)->first()->getFullUrl('thumbnail'),
+                'id' => optional($this->getMedia('images')->where('custom_properties.fav', true)->first())->id,
+                'original' => optional($this->getMedia('images')->where('custom_properties.fav', true)->first())->getFullUrl('original'),
+                'thumbnail' => optional($this->getMedia('images')->where('custom_properties.fav', true)->first())->getFullUrl('thumbnail'),
             ],
             'gallery' => ProductGalleryResource::collection($this->getMedia('images'))
         ];
