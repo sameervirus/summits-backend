@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\ApplicationAdminController;
 use App\Http\Controllers\Admin\BannerAdminController;
 use App\Http\Controllers\Admin\BrandAdminController;
 use App\Http\Controllers\Admin\CategoryAdminController;
+use App\Http\Controllers\Admin\GroupAdminController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\SiteContent\SitecontentController;
@@ -32,6 +33,15 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
     Route::resource("products", ProductAdminController::class, ['as' => 'admin']);
     Route::post("/delimg", [AdminController::class, "delimg"])->name("delimg");
     Route::post("/favimg", [AdminController::class, "favimg"])->name("favimg");
+
+    Route::resource("groups", GroupAdminController::class, ['as' => 'admin']);
+
+
+
+
+
+
+
 
     Route::get("/", [SitecontentController::class, 'index']);
 

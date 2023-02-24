@@ -26,10 +26,7 @@
 
 			<li><a><i class="fa fa-file-powerpoint-o"></i>Static Pages<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    @foreach($pages as $page)
-                    @continue($page->page == 'video')
-                    <li><a href="{{route('pages.edit',$page->page)}}">{{Str::title($page->page)}}</a></li>
-                    @endforeach
+                    <li><a href="{{route('admin.groups.index')}}">Groups</a></li>
 				</ul>
             </li>
 

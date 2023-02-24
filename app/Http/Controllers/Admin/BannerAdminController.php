@@ -117,7 +117,8 @@ class BannerAdminController extends Controller
             $data = $request->except(['_token', 'banner']);
             $banner->update($data);
 
-            $banner->addMedia($request->banner)->toMediaCollection($request->position);
+            if($request->hasFile('banner'))
+                $banner->addMedia($request->banner)->toMediaCollection($request->position);
 
             flash('Successfully Updated')->overlay()->success();
         } catch (\Throwable $th) {
