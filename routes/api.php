@@ -31,8 +31,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('addresses', AddressController::class);
     Route::resource('users', UserController::class);
 });
+
 Route::get('governorates', [CommonController::class, 'governorates']);
 Route::get('cities', [CommonController::class, 'cities']);
+Route::get('menus', [CommonController::class, 'menus']);
+
 Route::resource('products', ProductController::class)->scoped(['product' => 'slug']);
 Route::resource('groups', GroupProductController::class)->scoped(['group' => 'slug']);
 Route::resource('brands', BrandController::class)->scoped(['brand' => 'slug']);

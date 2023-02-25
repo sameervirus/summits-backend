@@ -32,9 +32,16 @@ class BrandResource extends JsonResource
             "name" => $this->name,
             "name_arabic" => $this->name_arabic,
             "slug" => $this->slug,
+            "path" => '/' . $this->slug,
+            "label" => $this->name,
             "description" => $this->description,
             "description_arabic" => $this->description_arabic,
             "cover_image" => [
+                "id" =>  optional($this->getFirstMedia('banners'))->id,
+                "thumbnail" =>  optional($this->getFirstMedia('banners'))->getFullUrl('cover'),
+                "original" =>  optional($this->getFirstMedia('banners'))->getFullUrl()
+            ],
+            "image" => [
                 "id" =>  optional($this->getFirstMedia('banners'))->id,
                 "thumbnail" =>  optional($this->getFirstMedia('banners'))->getFullUrl('cover'),
                 "original" =>  optional($this->getFirstMedia('banners'))->getFullUrl()

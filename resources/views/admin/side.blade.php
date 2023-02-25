@@ -10,11 +10,8 @@
             </li>
             <li><a><i class="fa fa-edit"></i>Main Content<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="{{route('sitecontent.index')}}?lang=en">English</a></li>
-					<li><a href="{{route('sitecontent.index')}}?lang=ar">Arabic</a></li>
-                    @can('trans_manage')
-                    {{-- <li><a href="admin/translations">Translation</a></li> --}}
-                    @endcan
+                    <li><a href="{{route('sitecontent.index')}}">Home</a></li>
+					<li><a href="{{route('sitecontent.index')}}">Arabic</a></li>
                 </ul>
             </li>
 
