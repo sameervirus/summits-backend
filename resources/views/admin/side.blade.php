@@ -10,8 +10,8 @@
             </li>
             <li><a><i class="fa fa-edit"></i>Main Content<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="{{route('sitecontent.index')}}">Home</a></li>
-					<li><a href="{{route('sitecontent.index')}}">Arabic</a></li>
+                    <!-- <li><a href="{{route('sitecontent.index')}}">Home</a></li>
+					<li><a href="{{route('sitecontent.index')}}">Arabic</a></li> -->
                 </ul>
             </li>
 
@@ -34,7 +34,7 @@
                     <li><a href="{{route('admin.categories.index')}}">Categories</a></li>
                     <li><a href="{{route('admin.tags.index')}}">Tags</a></li>
                     <li><a href="{{route('admin.applications.index')}}">Applications</a></li>
-                    <li><a href="{{route('feedbacks.index')}}">رسائل الموقع</a></li>
+                    <!-- <li><a href="{{route('feedbacks.index')}}">رسائل الموقع</a></li> -->
                 </ul>
             </li>
         <!--
