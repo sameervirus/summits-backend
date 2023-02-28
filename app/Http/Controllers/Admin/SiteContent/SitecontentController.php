@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admin\SiteContent;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Classes\Upload;
 use App\Models\Admin\SiteContent\Sitecontent;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class SitecontentController extends Controller
@@ -18,12 +19,10 @@ class SitecontentController extends Controller
     public function index()
     {
         //
-        $lang = request()->lang;
-        $sitecontent = Sitecontent::where('lang' , $lang)->orderBy('id')->get();
+        $sitecontent = Sitecontent::all();
 
         return view('admin.sitecontent.sitecontent', [
-            'sitecontent' => $sitecontent,
-            'lang' => $lang
+            'sitecontent' => $sitecontent
         ]);
     }
 
@@ -34,7 +33,34 @@ class SitecontentController extends Controller
      */
     public function create()
     {
-        //
+        $return = [];
+        $arabic = App::getLocale() == 'ar' ? true : false;
+        $sitecontent = Sitecontent::all();
+        foreach ($sitecontent as $item) {
+            if(Str::contains($item->code, '.')) {
+                $parts = explode('.', $item->code);
+                if($parts[0] == 'social') {
+                    $return[$parts[0]][] = $this->soical($item);
+                } else{
+                    $return[$parts[0]][$parts[1]] = $arabic ? $item->content_araabic : $item->content_english;
+                }
+            } else {
+                $return[$item->code] = $arabic ? $item->content_arabic : $item->content_english;
+            }
+        }
+        return $return;
+    }
+
+    private function soical($item) {
+        $parts = explode('.', $item->code);
+        return [
+            'id'=> $item->id,
+            'path'=> $item->content_english,
+            'image'=> '/assets/images/social/'. $parts[1] .'.svg',
+            'name'=> $parts[1],
+            'width'=> 20,
+            'height'=> 20,
+        ];
     }
 
     /**
@@ -45,41 +71,23 @@ class SitecontentController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $content = $request->content;
+        $request->validate([
+            'code' => ['required', 'string', 'max:255', 'unique:'. Sitecontent::class],
+            'content_english' => ['required'],
+            'content_arabic' => ['required'],
+        ]);
 
         $massage = 'Successfully Added';
 
-        if($request->file('file')){
-
-            $i = 1;
-            if(Str::slug($request->code) == 'favicon') $i=10;
-
-            $handle = new Upload($request->file('file'));
-
-            if ($handle->uploaded) {
-              $handle->image_resize         = true;
-              $handle->image_ratio_x        = true;
-              $handle->image_y              = 160 / $i;
-              $handle->process('images');
-
-              if ($handle->processed) {
-                $massage = 'Successfully Added';
-                $content=$handle->file_dst_name;
-                $handle->clean();
-              } else {
-                $massage = 'error : ' . $handle->error;
-              }
-            }
-        }
-
         SiteContent::create([
-            'content' => $content,
-            'code' => Str::slug($request->code),
-            'lang' => $request->lang
+            'content_english' => $request->content_english,
+            'content_arabic' => $request->content_arabic,
+            'code' => $request->code,
         ]);
 
-        return back()->with('message', $massage);
+        flash('Successfully Added')->overlay()->success();
+
+        return redirect()->route('admin.sitecontent.index');
     }
 
     /**
@@ -113,62 +121,22 @@ class SitecontentController extends Controller
      */
     public function update(Request $request, Sitecontent $sitecontent)
     {
-        //
-        \DB::transaction(function () use ($request) {
-            $lang = $request->lang;
+        DB::transaction(function () use ($request) {
 
-            if($request->file('logo')){
-                $handle = new Upload($request->file('logo'));
-
-                if ($handle->uploaded) {
-                    $handle->image_resize         = true;
-                    $handle->image_ratio_x        = true;
-                    $handle->image_y              = 160;
-                    $handle->process('images');
-                    if ($handle->processed) {
-                        $massage = 'Successfully Added';
-                        SiteContent::where([
-                                    ['code','=','logo'],
-                                    ['lang', '=', $lang]
-                                ])
-                                    ->update(['content' => $handle->file_dst_name]);
-                        $handle->clean();
-                    }
-                }
-
-            }
-
-            if($request->file('favicon')){
-                $handle = new Upload($request->file('favicon'));
-
-                if ($handle->uploaded) {
-                    $handle->image_resize         = true;
-                    $handle->image_ratio_x        = true;
-                    $handle->image_y              = 16;
-                    $handle->process('images');
-                    if ($handle->processed) {
-                        $massage = 'Successfully Added';
-                        SiteContent::where([
-                                        ['code','=','favicon'],
-                                        ['lang', '=', $lang]
-                                    ])->update(['content' => $handle->file_dst_name]);
-                        $handle->clean();
-                    }
-                }
-
-            }
             foreach ($request->all() as $key => $value) {
-
-                if ($key == '_method' or $key == '_token' or $key == 'logo' or $key == 'favicon' or $key == 'healthcare' or $key == 'traveltours' or $key == 'shandalodge' or $key == 'egytat') continue;
 
                 SiteContent::where([
                                     ['code','=', $key],
-                                    ['lang', '=', $lang]
-                                ])->update(['content' => $value]);
+                                ])->update([
+                                    'content_english' => $value[0],
+                                    'content_arabic' => $value[1]
+                                ]);
             }
         });
 
-        return back()->with('message','Successfully Updated');
+        flash('Successfully update')->overlay()->success();
+
+        return redirect()->route('admin.sitecontent.index');
     }
 
     /**

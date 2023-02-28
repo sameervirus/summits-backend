@@ -1,5 +1,5 @@
 @extends('admin.admin')
- 
+
 @section('title', 'Site Content')
 
 @section ('cssFiles')
@@ -78,7 +78,7 @@
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>                                
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                             </li>
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
                             </li>
@@ -93,51 +93,33 @@
                         @endif
                         <br>
                         @if(count($sitecontent) > 0)
-                        <form id="site-identity" action="{{route('sitecontent.update' , ['sitecontent' => $sitecontent[0] ] )}}" class="form-horizontal form-label-left" method="POST" enctype="multipart/form-data">
-                            
+                        <form id="site-identity" action="{{route('admin.sitecontent.update' , ['sitecontent' => $sitecontent[0] ] )}}" class="form-horizontal form-label-left" method="POST" enctype="multipart/form-data">
+
                             {{ csrf_field() }} {{ method_field('PUT') }}
-                            
+
                             @foreach ($sitecontent as $value)
 
-                            @if ($value->code == 'logo' || $value->code == 'favicon' || $value->code == 'logo-light')
 
                             <div class="form-group">
-                                <label for="details" class="col-md-3 control-label">{{$value->code}}</label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <div class="image view view-first {{$value->code}}">
-                                      <img src="{{asset('images/'. $value->content )}}" alt="image" id="{{$value->id}}">
-                                      <div class="mask no-caption">
-                                        <div class="tools tools-bottom">
-                                          <input type="file" name="{{$value->code}}" id="file_{{$value->id}}" data-id="{{$value->id}}" class="inputfile" />
-                                          <label for="file_{{$value->id}}">Change Picture</label>
-                                        </div>
-                                      </div>
-                                    </div>
+                                <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{$value->code}}">{{Str::title(str_replace('-',' ',$value->code))}} </label>
+                                <div class="col-md-5 col-sm-5 col-xs-12">
+                                    <input type="text" name="{{$value->code}}[]" id="{{$value->code}}" class="form-control col-md-5 col-xs-12" value="{{$value->content_english}}">
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-12">
+                                    <input type="text" name="{{$value->code}}[]" id="{{$value->code}}" class="form-control col-md-5 col-xs-12" value="{{$value->content_arabic}}">
                                 </div>
                             </div>
-
-                            @else
-
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{$value->code}}">{{Str::title(str_replace('-',' ',$value->code))}} </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" name="{{$value->code}}" id="{{$value->code}}" class="form-control col-md-7 col-xs-12" value="{{$value->content}}">
-                                </div>
-                            </div>                             
-
-                            @endif
 
 
                             @endforeach
 
-                            
+
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                     <button type="submit" class="btn btn-success">Save Change</button>
                                 </div>
                             </div>
-                            <input type="hidden" name="lang" value="{{$lang}}">
                         </form>
                         @endif
                     </div>
@@ -154,71 +136,47 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
           </button>
           <h4 class="modal-title" id="myModalLabel2">Add Content</h4>
-        </div>                                
-        <form class="form-horizontal" role="form" method="POST" action="{{route('sitecontent.store')}}" enctype="multipart/form-data">                              
+        </div>
+        <form class="form-horizontal" role="form" method="POST" action="{{route('admin.sitecontent.store')}}" enctype="multipart/form-data">
         <div class="modal-body">
-          
+
             {{ csrf_field() }}
 
             <input type="hidden" name="_method" value="POST">
-            <input type="hidden" name="lang" value="{{$lang}}">
 
             <div class="form-group">
                 <label for="category" class="col-md-2 control-label">Code</label>
                 <div class="col-md-10">
-                    <input id="category" type="text" class="form-control" 
-                    name="code" value="" required>                    
+                    <input id="category" type="text" class="form-control"
+                    name="code" value="" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="name" class="col-md-2 control-label">Content</label>
                 <div class="col-md-10">
-                    <input id="name" type="text" class="form-control" name="content" value="" required>
+                    <input id="name" type="text" class="form-control" name="content_english" value="" required>
                 </div>
             </div>
 
-            <div class="form-group{{ $errors->has('img') ? ' has-error' : '' }}">
-                <label for="img" class="col-md-2 control-label">Images</label>
-                
+            <div class="form-group">
+                <label for="name" class="col-md-2 control-label">عربي</label>
                 <div class="col-md-10">
-                    <input id="img" type="file" class="form-control" name="file" value="" accept="image/*">
-                    <p class="help-block">Use High resolution images</p>
+                    <input id="name" type="text" class="form-control" name="content_arabic" value="" required>
                 </div>
-            </div>                              
+            </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Add</button>
         </div>
-        </form>                                
+        </form>
       </div>
     </div>
 </div>
 @endsection
 
 @section('jsFiles')
-    
-    <!-- iCheck -->
-    <script src="{{asset('vendors/iCheck/icheck.min.js')}}"></script>
-    <script type="text/javascript">
-      
-      function readURL(input, id) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            
-            reader.onload = function (e) {
-                $('#' + id).attr('src', e.target.result);
-            }
-            
-            reader.readAsDataURL(input.files[0]);
-        }
-      } 
-
-      $(".inputfile").change(function(){
-          var img = $(this).data('id');
-          readURL(this, img);
-      });
-    </script>
 
 @endsection

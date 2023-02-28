@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Admin\SiteContent\SitecontentController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
@@ -35,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('governorates', [CommonController::class, 'governorates']);
 Route::get('cities', [CommonController::class, 'cities']);
 Route::get('menus', [CommonController::class, 'menus']);
+Route::get('static-content', [SitecontentController::class, 'create']);
 
 Route::resource('products', ProductController::class)->scoped(['product' => 'slug']);
 Route::resource('groups', GroupProductController::class)->scoped(['group' => 'slug']);

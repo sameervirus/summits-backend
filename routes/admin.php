@@ -35,6 +35,8 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
     Route::post("/favimg", [AdminController::class, "favimg"])->name("favimg");
 
     Route::resource("groups", GroupAdminController::class, ['as' => 'admin']);
+    Route::resource("sitecontent", SitecontentController::class, ['as' => 'admin']);
+
 
 
 
@@ -56,7 +58,6 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
     Route::post("/upload/img", "Admin\AdminController@upload_img");
 
     Route::resource("slider", "Admin\Slide\SliderController");
-    Route::resource("sitecontent", SitecontentController::class);
 
 
     Route::resource("/pages", "Admin\Pages\PageController");

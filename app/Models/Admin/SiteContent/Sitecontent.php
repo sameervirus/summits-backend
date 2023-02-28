@@ -8,6 +8,6 @@ class Sitecontent extends Model
 {
     //
     protected $fillable = [
-        'code','content','lang',
+        'code','content_english','content_arabic',
     ];
 }
