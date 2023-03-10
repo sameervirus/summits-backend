@@ -7,6 +7,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AddressResource extends JsonResource
 {
     /**
+     * The "data" wrapper that should be applied.
+     *
+     * @var string
+     */
+    public function __construct($resource) { self::withoutWrapping(); parent::__construct($resource); }
+
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request

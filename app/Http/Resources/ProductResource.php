@@ -29,6 +29,25 @@ class ProductResource extends JsonResource
             'unit' => $this->unit,
             'product_type' => $this->product_type,
             'tag' => $this->tags,
+            'variations' => $this->when($this->product_type == 'variable', [
+                [
+                    "id" => 8,
+                    "attribute_id" => 3,
+                    "value" => "12oz",
+                    "attribute" => [
+                      "id" => 3,
+                      "slug" => "available-in",
+                      "name" => "Available In",
+                      "values" => [
+                        [
+                          "id"  => 8,
+                          "attribute_id" => 3,
+                          "value" => "12oz"
+                        ]
+                      ]
+                    ]
+                ]
+            ]),
             'image' => [
                 'id' => optional($this->getMedia('images')->where('custom_properties.fav', true)->first())->id,
                 'original' => optional($this->getMedia('images')->where('custom_properties.fav', true)->first())->getFullUrl('original'),
