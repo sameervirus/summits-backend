@@ -63,13 +63,15 @@ class CommonController extends Controller
             'label' => 'menu-contact-us',
         ];
 
-        return [
-            $groups[0],
-            $groups[1],
-            $brands,
-            $applications,
-            // $tags,
-            $contacts,
-        ];
+        $return = [];
+
+        if(@$groups[0]) array_push($return, $groups[0]);
+        if(@$groups[1]) array_push($return, $groups[1]);
+        if($brands) array_push($return, $brands);
+        if($applications) array_push($return, $applications);
+        // if($tags) array_push($return, $tags);
+        if($contacts) array_push($return, $contacts);
+
+        return $return;
     }
 }

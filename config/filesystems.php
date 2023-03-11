@@ -36,34 +36,28 @@ return [
             'throw' => false,
         ],
 
+        'media' => [
+            'driver' => 'local',
+            'root'   => public_path('media'),
+            'url'    => env('APP_URL').'/media',
+            'permissions' => [
+                'file' => [
+                    'public' => 0774,
+                    'private' => 0774,
+                ],
+                'dir' => [
+                    'public' => 0775,
+                    'private' => 0775,
+                ],
+            ],
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,
-        ],
-
-        'media' => [
-            'driver' => 'local',
-            'root'   => public_path('media'),
-            'url'    => env('APP_URL').'/media',
-        ],
-
-        'media' => [
-            'driver' => 'local',
-            'root' => public_path('media'),
-            'url' => env('APP_URL').'/media',
-            'permissions' => [
-                'file' => [
-                    'public' => 0774,
-                    'private' => 0600,
-                ],
-                'dir' => [
-                    'public' => 0775,
-                    'private' => 0700,
-                ],
-            ],
         ],
 
         's3' => [
