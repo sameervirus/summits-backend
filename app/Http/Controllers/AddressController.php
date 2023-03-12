@@ -18,7 +18,10 @@ class AddressController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return AddressResource::collection($user->addresses);
+        if($user)
+            return AddressResource::collection($user->addresses);
+
+        return [];
     }
 
     /**

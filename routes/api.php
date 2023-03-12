@@ -30,10 +30,10 @@ Route::middleware(['auth'])->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware(['auth'])->group(function () {
-    Route::resource('addresses', AddressController::class);
+    Route::post('addresses', [AddressController::class, 'store']);
     Route::resource('users', UserController::class);
 });
-
+Route::get('addresses', [AddressController::class, 'index']);
 Route::get('governorates', [CommonController::class, 'governorates']);
 Route::get('cities', [CommonController::class, 'cities']);
 Route::get('menus', [CommonController::class, 'menus']);

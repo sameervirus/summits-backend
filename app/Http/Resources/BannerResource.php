@@ -29,12 +29,12 @@ class BannerResource extends JsonResource
             'slug' => $this->slug,
             'image' => [
                 'mobile' => [
-                    'url' => optional($this->getFirstMedia($this->position))->getFullUrl(),
+                    'url' => optional($this->getFirstMedia($this->position))->getFullUrl($this->position),
                     'width' => $this->getWidthAndHeight($this->position)['width'],
                     'height' => $this->getWidthAndHeight($this->position)['height'],
                 ],
                 'desktop' => [
-                    'url' => optional($this->getFirstMedia($this->position))->getFullUrl(),
+                    'url' => optional($this->getFirstMedia($this->position))->getFullUrl($this->position),
                     'width' => $this->getWidthAndHeight($this->position)['width'],
                     'height' => $this->getWidthAndHeight($this->position)['height'],
                 ]
