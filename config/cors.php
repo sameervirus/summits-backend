@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000'), 'http://summits-shop.com', 'http://www.summits-shop.com'],
+    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000'), 'https://summits-shop.com', 'https://www.summits-shop.com', 'http://summits-shop.com', 'http://www.summits-shop.com'],
 
     'allowed_origins_patterns' => [],
 
