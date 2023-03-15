@@ -42,7 +42,7 @@ class SitecontentController extends Controller
                 if($parts[0] == 'social') {
                     $return[$parts[0]][] = $this->soical($item);
                 } else{
-                    $return[$parts[0]][$parts[1]] = $arabic ? $item->content_araabic : $item->content_english;
+                    $return[$parts[0]][$parts[1]] = $arabic ? $item->content_arabic : $item->content_english;
                 }
             } else {
                 $return[$item->code] = $arabic ? $item->content_arabic : $item->content_english;
@@ -121,20 +121,25 @@ class SitecontentController extends Controller
      */
     public function update(Request $request, Sitecontent $sitecontent)
     {
-        DB::transaction(function () use ($request) {
+        DB::beginTransaction();
 
-            foreach ($request->all() as $key => $value) {
-
-                SiteContent::where([
-                                    ['code','=', $key],
-                                ])->update([
-                                    'content_english' => $value[0],
-                                    'content_arabic' => $value[1]
-                                ]);
+        try {
+            foreach ($request->except(['_token', '_method']) as $key => $value) {
+                $key = str_replace('_', '.', $key);
+                $ef = SiteContent::where('code','=', $key)
+                            ->update([
+                                'content_english' => $value[0],
+                                'content_arabic' => $value[1]
+                            ]);
+                if($ef == 0) return $key;
             }
-        });
-
-        flash('Successfully update')->overlay()->success();
+            DB::commit();
+            flash('Successfully update')->overlay()->success();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            flash('Error')->overlay()->error();
+            return $th;
+        }
 
         return redirect()->route('admin.sitecontent.index');
     }
