@@ -40,13 +40,18 @@ class CommonController extends Controller
             'mega_contentBottom' => '<strong>30% Off</strong> the shipping of your first order with the code: <strong>RAZOR-SALE30</strong>',
             'subMenu' => BrandResource::collection(Brand::get())
         ];
+        $app = App::getLocale() == 'ar'
+                    ? Application::select('id','name_arabic as label', 'slug as path')->get()
+                    : Application::select('id','name_english as label', 'slug as path')->get();
+        $apps = $app->map(function($item, $key) {
+                    $item->path = '/search?dietary='. $item->path;
+                    return $item;
+                });
         $applications = [
             'id' => 2000,
             'path' => '/',
             'label' => 'menu-dietary',
-            'subMenu' => App::getLocale() == 'ar'
-                            ? Application::select('id','name_arabic as label', 'slug as path')->get()
-                            : Application::select('id','name_english as label', 'slug as path')->get(),
+            'subMenu' => $apps->all()
         ];
         // $tags = [
         //     'id' => 3000,

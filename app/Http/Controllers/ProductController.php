@@ -13,9 +13,28 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ProductResource::collection(Product::paginate(1));
+        // return $request->all();
+        $query = Product::orderBy('id', 'desc');
+
+        if($request->has('brand') && $request->brand != 'undefined') {
+            $query->whereHas('brand', function($b) use ($request) {
+                $b->where('slug',$request->brand);
+            });
+        }
+        if($request->has('dietary') && $request->dietary != 'undefined') {
+            $query->whereHas('applications', function($a) use ($request) {
+                $a->whereIn('slug', explode(',', $request->dietary));
+            });
+        }
+        if($request->has('category') && $request->category != 'undefined') {
+            $query->whereHas('categories', function($c) use ($request) {
+                $c->whereIn('slug', explode(',', $request->category));
+            });
+        }
+        $products = $query->paginate(1);
+        return ProductResource::collection($products);
     }
 
     /**

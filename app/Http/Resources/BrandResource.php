@@ -32,7 +32,7 @@ class BrandResource extends JsonResource
             "name" => $this->name,
             "name_arabic" => $this->name_arabic,
             "slug" => $this->slug,
-            "path" => '/' . $this->slug,
+            "path" => '/shops/' . $this->slug,
             "label" => $this->name,
             "description" => $this->description,
             "description_arabic" => $this->description_arabic,
