@@ -19,7 +19,7 @@ class Category extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumbnail')
-              ->fit(Manipulations::FIT_CROP, 80, 80)
+              ->fit(Manipulations::FIT_CROP, 200, 200)
               ->nonQueued();
     }
 

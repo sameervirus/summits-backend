@@ -23,7 +23,7 @@ class Brand extends Model implements HasMedia
               ->fit(Manipulations::FIT_CROP, 120, 120)
               ->nonQueued();
         $this->addMediaConversion('cover')
-              ->fit(Manipulations::FIT_CROP, 1919, 260)
+              ->fit(Manipulations::FIT_CROP, 255, 160)
               ->nonQueued();
     }
 

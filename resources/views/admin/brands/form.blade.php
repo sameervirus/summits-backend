@@ -39,7 +39,6 @@
     </div>
     <div class="col-md-5">
         <input type="text" class="form-control" name="address_arabic"  value="{{ $item->address_arabic ?? '' }}" placeholder="العنوان">
-
     </div>
 </div>
 
@@ -47,10 +46,10 @@
     <label for="description" class="col-md-2 control-label">Description الوصف*</label>
 
     <div class="col-md-5">
-        <textarea type="text" name="description_english" id="description" class="form-control" row="4" placeholder="description" required>{!! $item->description_english ?? '' !!}</textarea>
+        <textarea type="text" name="description_english" id="description" class="form-control" row="8" placeholder="description" required>{!! $item->description_english ?? '' !!}</textarea>
     </div>
     <div class="col-md-5">
-        <textarea type="text" name="description_arabic" class="form-control" row="4" placeholder="الوصف" required>{!! $item->description_arabic ?? '' !!}</textarea>
+        <textarea type="text" name="description_arabic" class="form-control" row="8" placeholder="الوصف" required>{!! $item->description_arabic ?? '' !!}</textarea>
     </div>
 </div>
 
@@ -59,6 +58,7 @@
 
     <div class="col-md-10">
         <input id="logo" type="file" class="form-control" name="logo" accept="images/*" {{ @$item ? '' : 'required'}}>
+        <p class="help-block">size = 120x120</p>
     </div>
 </div>
 
@@ -67,5 +67,6 @@
 
     <div class="col-md-10">
         <input id="banner" type="file" class="form-control" name="banner" accept="images/*" {{ @$item ? '' : 'required'}}>
+        <p class="help-block">size = 255x160</p>
     </div>
 </div>

@@ -30,5 +30,6 @@
 
     <div class="col-md-10">
         <input id="image" type="file" class="form-control" name="image" accept="images/*" {{ @$item ? '' : 'required'}}>
+        <p class="help-block">size = 200x200</p>
     </div>
 </div>
