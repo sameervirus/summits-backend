@@ -33,7 +33,7 @@ class ProductController extends Controller
                 $c->whereIn('slug', explode(',', $request->category));
             });
         }
-        $products = $query->paginate(1);
+        $products = $query->paginate(20);
         return ProductResource::collection($products);
     }
 
@@ -101,5 +101,12 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+
+    public function bestseller()
+    {
+        $products = Product::take(12)->get();
+        return ProductResource::collection($products);
     }
 }

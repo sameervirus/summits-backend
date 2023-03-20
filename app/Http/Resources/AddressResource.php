@@ -28,7 +28,8 @@ class AddressResource extends JsonResource
             'address' => ['formatted_address' => $this->address . ', ' . $this->city->city_name_ar . ', ' . $this->governorate->governorate_name_ar],
             'default' => $this->default ? true : false,
             'city_id' => $this->city_id,
-            'governorate_id' => $this->governorate_id
+            'governorate_id' => $this->governorate_id,
+            'shipping_fees' => optional($this->governorate)->shipping_fees
         ];
     }
 }

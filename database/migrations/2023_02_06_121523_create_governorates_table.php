@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('governorate_name_ar');
             $table->string('governorate_name_en');
+            $table->string('shipping_fees')->nullable();
         });
     }
 

@@ -49,51 +49,11 @@ Route::resource('tags', TagController::class)->scoped(['tag' => 'slug']);
 Route::resource('applications', ApplicationController::class)->scoped(['application' => 'slug']);
 Route::resource('banners', BannerController::class);
 
+// Product spical
+Route::get('best-seller', [ProductController::class, 'bestseller']);
+
 Route::get('fake/{file}', function()
 {
     return response()->file(app_path('../api/'. request('file')));
 });
-Route::get('social', function() {
-    return [
-        'social' => [
-            [
-            'id'=> 1,
-            'path'=> 'https://www.facebook.com/',
-            'image'=> 'http://localhost:3000/assets/images/social/facebook.svg',
-            'name'=> 'facebook',
-            'width'=> 20,
-            'height'=> 20,
-            ],
-            [
-                'id'=> 2,
-                'path'=> 'https://twitter.com/',
-                'image'=> '/assets/images/social/twitter.svg',
-                'name'=> 'twitter',
-                'width'=> 20,
-                'height'=> 20,
-            ],
-            [
-                'id'=> 3,
-                'path'=> 'https://instagram.com/',
-                'image'=> '/assets/images/social/instagram.svg',
-                'name'=> 'instagram',
-                'width'=> 20,
-                'height'=> 20,
-            ],
-            [
-                'id'=> 4,
-                'path'=> 'https://youtube.com/',
-                'image'=> '/assets/images/social/youtube.svg',
-                'name'=> 'youtube',
-                'width'=> 20,
-                'height'=> 20,
-            ],
-        ],
-        'contacts'=> [
-            'phone'=> '1232322323232',
-            'email'=> 'example@example.com',
-            'address'=> 'Acme Widgets 123 Widget Street Acmeville, AC 12345 United States of America'
-        ],
-        'topbartext'=> 'الشحن المجاني. لا يوجد حد أدنى للشراء مطلوب *' . date('H:i:s')
-    ];
-});
+
