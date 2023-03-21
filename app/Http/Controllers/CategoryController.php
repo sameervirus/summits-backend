@@ -25,7 +25,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return new CategoriesResources(Category::whereNull('parent_id')->with('childs')->first());
     }
 
     /**
@@ -47,7 +47,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+
     }
 
     /**

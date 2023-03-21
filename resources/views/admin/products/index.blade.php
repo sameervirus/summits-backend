@@ -117,7 +117,7 @@
                             <table class="table table-striped jambo_table">
                                 <thead>
                                     <tr class="headings">
-                                        <th>No.</th>
+                                        <th>ID</th>
                                         <th class="column-title">name</th>
                                         <th class="column-title">الاسم</th>
                                         <th class="column-title">Quantity</th>
@@ -130,7 +130,7 @@
                                    @foreach ($items as $item)
                                     <tr id="item-{{$item->id }}" class="even pointer">
                                         <td class="a-center ">
-                                            {{ $loop->iteration }}
+                                            {{ $item->id }}
                                         </td>
                                         <td class="name">{{ $item->name_english }}</td>
                                         <td class="name">{{ $item->name_arabic }}</td>

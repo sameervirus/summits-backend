@@ -18,7 +18,7 @@ class CategoryChild extends JsonResource
         return [
             'id' => $this->id,
             'slug' => $this->slug,
-            'name' => App::getLocale() == 'ar' ? $this->name_arabic : $this->name,
+            'name' => App::getLocale() == 'ar' ? $this->name_arabic : $this->name_english,
         ];
     }
 }

@@ -18,7 +18,6 @@ class CategoriesResources extends JsonResource
             'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
-            'name_arabic' => $this->name_arabic,
             'productCount' => 0,
             'image' => [
                 "id" => optional($this->getFirstMedia('image'))->id,
