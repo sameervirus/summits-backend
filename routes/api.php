@@ -9,6 +9,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\GroupProductController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
@@ -32,6 +33,7 @@ Route::middleware(['auth'])->get('/user', function (Request $request) {
 Route::middleware(['auth'])->group(function () {
     Route::post('addresses', [AddressController::class, 'store']);
     Route::resource('users', UserController::class);
+    Route::resource('orders', OrderController::class);
 });
 Route::get('addresses', [AddressController::class, 'index']);
 Route::get('governorates', [CommonController::class, 'governorates']);

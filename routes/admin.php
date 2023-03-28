@@ -47,23 +47,23 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
 
     Route::get("/", [SitecontentController::class, 'index']);
 
-    Route::post("/reorder", "Admin\AdminController@reorder")->name("reorder");
-    Route::post("/preorder", "Admin\AdminController@preorder")->name(
-        "preorder"
-    );
+    // Route::post("/reorder", "Admin\AdminController@reorder")->name("reorder");
+    // Route::post("/preorder", "Admin\AdminController@preorder")->name(
+    //     "preorder"
+    // );
 
-    Route::post("/delimgpost", "Admin\AdminController@delimgpost")->name(
-        "delimg_post"
-    );
-    Route::post("/upload/img", "Admin\AdminController@upload_img");
+    // Route::post("/delimgpost", "Admin\AdminController@delimgpost")->name(
+    //     "delimg_post"
+    // );
+    // Route::post("/upload/img", "Admin\AdminController@upload_img");
 
-    Route::resource("slider", "Admin\Slide\SliderController");
-
-
-    Route::resource("/pages", "Admin\Pages\PageController");
+    // Route::resource("slider", "Admin\Slide\SliderController");
 
 
-    Route::resource("posts", PostController::class);
+    // Route::resource("/pages", "Admin\Pages\PageController");
+
+
+    // Route::resource("posts", PostController::class);
 
     Route::get("/feedbacks", "Admin\AdminController@feedbacks")->name(
         "feedbacks.index"

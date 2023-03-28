@@ -33,3 +33,11 @@ Route::post('/logout', [AuthController::class, 'destroy'])
                 ->middleware('auth')
                 ->name('web-logout');
 require __DIR__.'/admin.php';
+
+Route::group([
+    'prefix'     => 'orders',
+    'as'         => 'order.',
+    'middleware' => 'auth',
+], function () {
+    ctf0\PayMob\PayMobRoutes::routes();
+});

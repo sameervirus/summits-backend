@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbf32a86b1db576b67c9df90c4972c49",
+    "content-hash": "289c5d59935fd26121c5bee550d25784",
     "packages": [
         {
             "name": "brick/math",
@@ -61,6 +61,67 @@
                 }
             ],
             "time": "2022-08-10T22:54:19+00:00"
+        },
+        {
+            "name": "ctf0/laravel-paymob",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ctf0/laravel-paymob.git",
+                "reference": "a66a40f0b7b338bb2339234591218ef3308ce2e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ctf0/laravel-paymob/zipball/a66a40f0b7b338bb2339234591218ef3308ce2e7",
+                "reference": "a66a40f0b7b338bb2339234591218ef3308ce2e7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^7.0|^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ctf0\\PayMob\\PayMobServiceProvider"
+                    ],
+                    "aliases": {
+                        "PayMob": "ctf0\\PayMob\\Facades\\PayMob"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ctf0\\PayMob\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "muah",
+                    "email": "muah003@gmail.com"
+                }
+            ],
+            "description": "paymob integration for laravel",
+            "homepage": "https://github.com/ctf0/laravel-paymob",
+            "keywords": [
+                "laravel",
+                "paymob"
+            ],
+            "support": {
+                "issues": "https://github.com/ctf0/laravel-paymob/issues",
+                "source": "https://github.com/ctf0/laravel-paymob/tree/v2.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.patreon.com/ctf0",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2022-09-05T08:16:33+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -8950,5 +9011,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
