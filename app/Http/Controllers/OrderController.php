@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use ctf0\PayMob\Facades\PayMob;
 use ctf0\PayMob\Integrations\CreditCard;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use PhpParser\Node\Stmt\Return_;
 
 class OrderController extends Controller
 {
@@ -52,21 +55,54 @@ class OrderController extends Controller
             'items.*.quantity' => 'required',
         ]);
 
-        $user         = User::find($request->user_id);
-        $total        = $request->total;
-        $items        = collect($request->items);
-        $payment      = $request->payment_option;
+        try {
+            DB::beginTransaction();
+            $user         = User::find($request->user_id);
+            $total        = $request->total;
+            $items        = collect($request->items);
+            $payment      = $request->payment_option;
+    
+            $order = Order::create([
+                "payment_gateway" => $payment,
+                "total" => $total,
+                "notes" => $request->notes,
+                "shipping_fee" => $request->shipping,
+                "user_id" => $request->user_id,
+                "fname" => $user->fname,
+                "lname" => $user->lname,
+                "email" => $user->email,
+                "phone" => $user->phone,
+                "address_id" => $request->address_id,
+                "address" => $request->full_address,
+                "status_id" => 1,
+            ]);
 
-        if($payment != 'cash-delivery') {
-            $token = $this->getToken($items, $total, $user);
-            if($payment == 'credit-card') {
-                return [
-                   "url" => "https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('ACCEPT_CARD_IFRAME_ID') . "?payment_token=$token",
-                   "payment_option" => "credit-card"
-                ];
+            foreach ($request->items as $item) {
+                $order->products()->attach($item['id'], [
+                    'name' => $item['name'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price']
+                ]);
             }
+    
+            if($payment != 'cash-delivery') {
+                $paymob_data = $this->getToken($items, $total, $user);
+                $token  = $paymob_data[0];
+                $order->paymob_order = $paymob_data[1];
+                $order->save();
+                if($payment == 'credit-card') {
+                    DB::commit();
+                    return [
+                       "url" => "https://accept.paymobsolutions.com/api/acceptance/iframes/" . env('ACCEPT_CARD_IFRAME_ID') . "?payment_token=$token",
+                       "payment_option" => "credit-card"
+                    ];
+                }
+            }
+            
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $th;
         }
-
 
     }
 
@@ -121,7 +157,7 @@ class OrderController extends Controller
                         "currency" => "EGP", 
                         "integration_id" => env('ACCEPT_CARD_INTEGRATION_ID')
                     ]);
-                    return $payment_keys['token'];
+                    return [$payment_keys['token'], $orders['id']];
                 }
             }
         } catch (RequestException $e) {
@@ -134,33 +170,31 @@ class OrderController extends Controller
 
     private function calculateHash($obj) {
         if(!$obj) return false;
-
-        $json = json_decode($obj);
         
-        $amount_cents                           = $json->obj->amount_cents;
-        $created_at                             = $json->obj->order->created_at;
-        $currency                               = $json->obj->order->currency;
-        $error_occured                          = $json->obj->error_occured;
-        $has_parent_transaction                 = $json->obj->has_parent_transaction;
-        $obj_id                                 = $json->obj->order->id;
-        $integration_id                         = $json->obj->integration_id;
-        $is_3d_secure                           = $json->obj->is_3d_secure;
-        $is_auth                                = $json->obj->is_auth;
-        $is_capture                             = $json->obj->is_capture;
-        $is_refunded                            = $json->obj->is_refunded;
-        $is_standalone_payment                  = $json->obj->is_standalois_capturene_payment;
-        $is_voided                              = $json->obj->is_voided;
-        $order_id                               = $json->obj->order->id;
-        $owner                                  = $json->obj->order->merchant->id;
-        $pending                                = $json->obj->pending;
-        $source_data_pan                        = $json->obj->source_data->pen;
-        $source_data_sub_type                   = $json->obj->source_data->sub_type;
-        $source_data_type                       = $json->obj->source_data->type;
-        $success                                = $json->obj->success;
+        $amount_cents                           = $obj->amount_cents;
+        $created_at                             = $obj->order->created_at;
+        $currency                               = $obj->order->currency;
+        $error_occured                          = $obj->error_occured;
+        $has_parent_transaction                 = $obj->has_parent_transaction;
+        $obj_id                                 = $obj->order->id;
+        $integration_id                         = $obj->integration_id;
+        $is_3d_secure                           = $obj->is_3d_secure;
+        $is_auth                                = $obj->is_auth;
+        $is_capture                             = $obj->is_capture;
+        $is_refunded                            = $obj->is_refunded;
+        $is_standalone_payment                  = $obj->is_standalois_capturene_payment;
+        $is_voided                              = $obj->is_voided;
+        $order_id                               = $obj->order->id;
+        $owner                                  = $obj->order->merchant->id;
+        $pending                                = $obj->pending;
+        $source_data_pan                        = $obj->source_data->pan;
+        $source_data_sub_type                   = $obj->source_data->sub_type;
+        $source_data_type                       = $obj->source_data->type;
+        $success                                = $obj->success;
 
         $str = $amount_cents.$created_at.$currency.$error_occured.$has_parent_transaction.$obj_id.$integration_id.$is_3d_secure.$is_auth.$is_capture.$is_refunded.$is_standalone_payment.$is_voided.$order_id.$owner.$pending.$source_data_pan.$source_data_sub_type.$source_data_type.$success;
 
-        $secure_hash = $json->obj->data->secure_hash;
+        $secure_hash = $obj->data->secure_hash;
 
         return hash_hmac('sha512', $str, env('ACCEPT_HMAC_ID')) == $secure_hash ? true : false;
     }
@@ -171,9 +205,13 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show($paymob_order)
     {
-        //
+        if(! $paymob_order) return [];
+
+        $order = Order::where('paymob_order', $paymob_order)->firstOrFail();
+
+        return new OrderResource($order);
     }
 
     /**
@@ -194,9 +232,20 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request)
     {
-        //
+        $obj = json_decode(json_encode($request->obj));
+
+        if(! $this->calculateHash($obj)) return false;
+
+        // save the transaction data to the server
+        Order::where('paymob_order', $obj->order->id)->update([
+            "paymob_id" => $obj->id,
+            "paymob_pending" => $obj->pending,
+            "paymob_success" => $obj->success,
+            "paymob_amount" => $obj->amount_cents * 100,
+        ]);
+
     }
 
     /**
@@ -243,15 +292,7 @@ class OrderController extends Controller
      */
     public function complete(Request $request)
     {
-        // if(! $this->calculateHash($request->obj)) return false;
-        $json = json_decode($request->obj);
-
-        // save the transaction data to the server
-        Order::where('paymob_order', $json->obj->order->id)->update([
-            "paymob_id" => $json->obj->id,
-            "paymob_pending" => $json->obj->pending
-        ]);
-
+        
         // return view('paymob::complete');
     }
 }

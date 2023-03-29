@@ -27,7 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('address_id');
             $table->string('address');
             $table->unsignedBigInteger('status_id');
-            $table->string('tracking_number');
+            $table->string('tracking_number')->nullable();
             $table->string('paymob_id')->nullable();
             $table->string('paymob_order')->nullable();
             $table->boolean('paymob_pending')->nullable();
@@ -38,6 +38,9 @@ return new class extends Migration
         Schema::create('order_product', function (Blueprint $table) {
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
+            $table->string('name');
+            $table->string('quantity');
+            $table->string('price');
         });
         Schema::create('status', function (Blueprint $table) {
             $table->id();
