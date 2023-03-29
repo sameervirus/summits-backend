@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -34,10 +35,4 @@ Route::post('/logout', [AuthController::class, 'destroy'])
                 ->name('web-logout');
 require __DIR__.'/admin.php';
 
-Route::group([
-    'prefix'     => 'orders',
-    'as'         => 'order.',
-    'middleware' => 'auth',
-], function () {
-    ctf0\PayMob\PayMobRoutes::routes();
-});
+Route::get('/calc', [OrderController::class, "index"]);

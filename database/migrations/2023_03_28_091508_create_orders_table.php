@@ -28,6 +28,11 @@ return new class extends Migration
             $table->string('address');
             $table->unsignedBigInteger('status_id');
             $table->string('tracking_number');
+            $table->string('paymob_id')->nullable();
+            $table->string('paymob_order')->nullable();
+            $table->boolean('paymob_pending')->nullable();
+            $table->boolean('paymob_success')->nullable();
+            $table->string('paymob_amount')->nullable();
             $table->timestamps();
         });
         Schema::create('order_product', function (Blueprint $table) {
