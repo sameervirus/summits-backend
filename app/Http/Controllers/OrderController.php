@@ -6,13 +6,9 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
-use ctf0\PayMob\Facades\PayMob;
-use ctf0\PayMob\Integrations\CreditCard;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use PhpParser\Node\Stmt\Return_;
 
 class OrderController extends Controller
 {
@@ -168,33 +164,35 @@ class OrderController extends Controller
         return __('something went wrong, please try again later');
     }
 
-    private function calculateHash($obj) {
-        if(!$obj) return false;
+    private function calculateHash($json) {
+        if(!$json) return false;
         
-        $amount_cents                           = $obj->amount_cents;
-        $created_at                             = $obj->order->created_at;
-        $currency                               = $obj->order->currency;
-        $error_occured                          = $obj->error_occured;
-        $has_parent_transaction                 = $obj->has_parent_transaction;
-        $obj_id                                 = $obj->order->id;
-        $integration_id                         = $obj->integration_id;
-        $is_3d_secure                           = $obj->is_3d_secure;
-        $is_auth                                = $obj->is_auth;
-        $is_capture                             = $obj->is_capture;
-        $is_refunded                            = $obj->is_refunded;
-        $is_standalone_payment                  = $obj->is_standalois_capturene_payment;
-        $is_voided                              = $obj->is_voided;
-        $order_id                               = $obj->order->id;
-        $owner                                  = $obj->order->merchant->id;
-        $pending                                = $obj->pending;
-        $source_data_pan                        = $obj->source_data->pan;
-        $source_data_sub_type                   = $obj->source_data->sub_type;
-        $source_data_type                       = $obj->source_data->type;
-        $success                                = $obj->success;
+        $amount_cents                           = $json->obj->amount_cents;
+        $created_at                             = $json->obj->order->created_at;
+        $currency                               = $json->obj->order->currency;
+        $error_occured                          = $json->obj->error_occured ? 'true' : 'false';
+        $has_parent_transaction                 = $json->obj->has_parent_transaction ? 'true' : 'false';
+        $obj_id                                 = $json->obj->id;
+        $integration_id                         = $json->obj->integration_id;
+        $is_3d_secure                           = $json->obj->is_3d_secure ? 'true' : 'false';
+        $is_auth                                = $json->obj->is_auth ? 'true' : 'false';
+        $is_capture                             = $json->obj->is_capture ? 'true' : 'false';
+        $is_refunded                            = $json->obj->is_refunded ? 'true' : 'false';
+        $is_standalone_payment                  = $json->obj->is_standalone_payment ? 'true' : 'false';
+        $is_voided                              = $json->obj->is_voided ? 'true' : 'false';
+        $order_id                               = $json->obj->order->id;
+        $owner                                  = $json->obj->owner;
+        $pending                                = $json->obj->pending ? 'true' : 'false';
+        $source_data_pan                        = $json->obj->source_data->pan;
+        $source_data_sub_type                   = $json->obj->source_data->sub_type;
+        $source_data_type                       = $json->obj->source_data->type;
+        $success                                = $json->obj->success ? 'true' : 'false';
 
         $str = $amount_cents.$created_at.$currency.$error_occured.$has_parent_transaction.$obj_id.$integration_id.$is_3d_secure.$is_auth.$is_capture.$is_refunded.$is_standalone_payment.$is_voided.$order_id.$owner.$pending.$source_data_pan.$source_data_sub_type.$source_data_type.$success;
 
-        $secure_hash = $obj->data->secure_hash;
+        $secure_hash = $json->hmac;
+
+        return $str;
 
         return hash_hmac('sha512', $str, env('ACCEPT_HMAC_ID')) == $secure_hash ? true : false;
     }
@@ -234,18 +232,25 @@ class OrderController extends Controller
      */
     public function update(Request $request)
     {
-        $obj = json_decode(json_encode($request->obj));
+        $json = json_decode(json_encode($request->all()));
 
-        if(! $this->calculateHash($obj)) return false;
-
-        // save the transaction data to the server
-        Order::where('paymob_order', $obj->order->id)->update([
-            "paymob_id" => $obj->id,
-            "paymob_pending" => $obj->pending,
-            "paymob_success" => $obj->success,
-            "paymob_amount" => $obj->amount_cents * 100,
+        DB::table('pages')->insert([
+            'id' => 4,
+            'page' => 'kayla4',
+            'content' => json_encode($json)
         ]);
 
+        return $this->calculateHash($json);
+
+        if(! $this->calculateHash($json)) return false;
+
+        // save the transaction data to the server
+        Order::where('paymob_order', $json->obj->order->id)->update([
+            "paymob_id" => $json->obj->id,
+            "paymob_pending" => $json->obj->pending,
+            "paymob_success" => $json->obj->success,
+            "paymob_amount" => $json->obj->amount_cents / 100,
+        ]);
     }
 
     /**
