@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
+use App\Models\Admin\Pages\Page;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -35,4 +37,11 @@ Route::post('/logout', [AuthController::class, 'destroy'])
                 ->name('web-logout');
 require __DIR__.'/admin.php';
 
-Route::get('/calc', [OrderController::class, "index"]);
+Route::get('/calc', [OrderController::class, "create"]);
+Route::get('/pages', function() {
+    return Page::find(2)->content;
+    return json_decode(Page::find(2)->content);
+});
+Route::get('/complete-order', function(Request $request) {
+    return $request->all();
+});

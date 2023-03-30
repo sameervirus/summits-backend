@@ -33,6 +33,8 @@ return new class extends Migration
             $table->boolean('paymob_pending')->nullable();
             $table->boolean('paymob_success')->nullable();
             $table->string('paymob_amount')->nullable();
+            $table->string('discount')->nullable();
+            $table->dateTime('delivery_time')->nullable();
             $table->timestamps();
         });
         Schema::create('order_product', function (Blueprint $table) {
@@ -44,7 +46,8 @@ return new class extends Migration
         });
         Schema::create('status', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('english_name');
+            $table->string('arabic_name');
             $table->string('color');
             $table->timestamps();
         });

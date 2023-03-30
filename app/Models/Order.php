@@ -8,6 +8,15 @@ class Order extends Model
 {
     protected $guarded = [];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'delivery_time' => 'datetime',
+    ];
+
     public function products() {
         return $this->belongsToMany(Product::class)->withPivot(
                 'name',
@@ -25,6 +34,6 @@ class Order extends Model
     }
 
     public function status() {
-        return $this->belongsTo(Status::class, 'id', 'status_id', 'order_status');
+        return $this->belongsTo(Status::class);
     }
 }

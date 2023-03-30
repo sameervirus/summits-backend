@@ -23,9 +23,13 @@ class OrderProductResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "name" => $this->products->pivot->name,
-            "quantity" => $this->products->pivot->quantity,
-            "price" => $this->products->pivot->price
+            "name" => $this->pivot->name,
+            "quantity" => $this->pivot->quantity,
+            "price" => $this->pivot->price,
+            "image" => [
+                'id' => optional($this->getMedia('images')->where('custom_properties.fav', true)->first())->id,
+                "thumbnail" => optional($this->getMedia('images')->where('custom_properties.fav', true)->first())->getFullUrl('thumbnail'),
+            ]
         ];
     }
 }

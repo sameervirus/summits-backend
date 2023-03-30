@@ -28,11 +28,17 @@ class OrderResource extends JsonResource
                 "id" => $this->user_id,
                 "email" => $this->email
             ],
-            "total" => $this->paymob_amount,
+            "total" => $this->paymob_amount ?? $this->total,
             "shipping_fee" => $this->shipping_fee,
+            "delivery_fee" => $this->shipping_fee,
+            "amount" => ($this->paymob_amount ?? $this->total) - $this->shipping_fee,
             "payment_gateway" => $this->payment_gateway,
-            "products" => $this->products,
+            "products" => OrderProductResource::collection($this->products),
             "note" => $this->notes,
+            "shipping_address" => $this->address,
+            "discount" => $this->discount,
+            "delivery_time" => optional($this->delivery_time)->format('Y-m-d'),
+            "status" => $this->status,
             "created_at" => $this->created_at->format('Y-m-d'),
         ];
     }

@@ -9,6 +9,7 @@ use App\Models\Brand;
 use App\Models\City;
 use App\Models\Governorate;
 use App\Models\Group;
+use App\Models\Status;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -21,6 +22,10 @@ class CommonController extends Controller
 
     public function cities(Request $request) {
         return City::where('governorate_id', request('governorate_id'))->get();
+    }
+
+    public function status() {
+        return Status::all();
     }
 
     public function menus() {
