@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -44,7 +45,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $user = Auth::user();
+
+        return ProductResource::collection($user->wishes);
     }
 
     /**
@@ -55,7 +58,23 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'product_id' => 'required',
+        ]);
+
+        $user = Auth::user();
+        $product = Product::find(request('product_id'));
+
+        if($user && $product) {
+            if ($user->wishes()->where('id', request('product_id'))->exists()) {
+                // The user has the product, so you can remove it
+                $user->wishes()->detach(request('product_id'));
+            } else {
+                // The user doesn't have the product, so you can add it
+                $user->wishes()->attach(request('product_id'));
+            }
+        }
+        return $user->wishes->pluck('id')->toArray();
     }
 
     /**

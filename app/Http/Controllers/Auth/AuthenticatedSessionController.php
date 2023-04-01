@@ -33,7 +33,8 @@ class AuthenticatedSessionController extends Controller
         return response([
             'token' => $token,
             'permissions' => $user->getAllPermissions()->pluck('name')->toArray(),
-            'user' => $user
+            'user' => $user,
+            'wishlist' => $user->wishes->pluck('id')->toArray(),
         ]);
     }
 

@@ -46,6 +46,11 @@ return new class extends Migration
             $table->unsignedBigInteger('application_id');
             $table->unsignedBigInteger('product_id');
         });
+
+        Schema::create('product_user', function (Blueprint $table) {
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('user_id');
+        });
     }
 
     /**
