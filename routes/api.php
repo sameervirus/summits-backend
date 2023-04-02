@@ -11,6 +11,7 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\GroupProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -56,6 +57,7 @@ Route::resource('categories', CategoryController::class)->scoped(['category' => 
 Route::resource('tags', TagController::class)->scoped(['tag' => 'slug']);
 Route::resource('applications', ApplicationController::class)->scoped(['application' => 'slug']);
 Route::resource('banners', BannerController::class);
+Route::resource('reviews', ProductReviewController::class);
 
 // Product spical
 Route::get('best-seller', [ProductController::class, 'bestseller']);

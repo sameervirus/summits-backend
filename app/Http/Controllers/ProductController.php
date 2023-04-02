@@ -96,7 +96,27 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $categories = $product->categories;
+        $tags = $product->tags;
+        $applications = $product->applications;
+        $brand = $product->brand;
+
+        $relatedProducts = Product::whereHas('categories', function ($query) use ($categories) {
+            $query->whereIn('id', $categories->pluck('id'));
+        })
+        ->orWhereHas('tags', function ($query) use ($tags) {
+            $query->whereIn('id', $tags->pluck('id'));
+        })
+        ->orWhereHas('applications', function ($query) use ($applications) {
+            $query->whereIn('id', $applications->pluck('id'));
+        })
+        ->orWhere('brand_id', $product->brand_id)
+        ->where('id', '<>', $product->id)
+        ->inRandomOrder()
+        ->take(12)
+        ->get();
+
+        return ProductResource::collection($relatedProducts);
     }
 
     /**
