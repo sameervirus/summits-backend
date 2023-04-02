@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class ProductResource extends JsonResource
 {
@@ -29,6 +30,7 @@ class ProductResource extends JsonResource
             'unit' => $this->unit,
             'product_type' => $this->product_type,
             'tag' => $this->tags,
+            'wish' => $this->when(Auth::check(), $this->wishes()->where('id', Auth::user()->id)->exists()),
             'variations' => $this->when($this->product_type == 'variable', [
                 [
                     "id" => 8,
