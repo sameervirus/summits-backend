@@ -34,6 +34,11 @@ class ProductController extends Controller
                 $c->whereIn('slug', explode(',', $request->category));
             });
         }
+        if($request->has('tag') && $request->tag != 'undefined') {
+            $query->whereHas('tags', function($t) use ($request) {
+                $t->whereIn('slug', explode(',', $request->tag));
+            });
+        }
         $products = $query->paginate(20);
         return ProductResource::collection($products);
     }

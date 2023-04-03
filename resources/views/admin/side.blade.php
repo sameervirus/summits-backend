@@ -23,6 +23,7 @@
 			<li><a><i class="fa fa-file-powerpoint-o"></i>Static Pages<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{{route('admin.groups.index')}}">Groups</a></li>
+                    <li><a href="{{route('admin.review')}}">Products Reviews</a></li>
 				</ul>
             </li>
 

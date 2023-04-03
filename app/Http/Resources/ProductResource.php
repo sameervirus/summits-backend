@@ -30,7 +30,7 @@ class ProductResource extends JsonResource
             'unit' => $this->unit,
             'product_type' => $this->product_type,
             'tag' => $this->tags,
-            'wish' => $this->when(Auth::check(), $this->wishes()->where('id', Auth::user()->id)->exists()),
+            'wish' => $this->when(Auth::check(), $this->wishes()->where('id', Auth::id())->exists()),
             'variations' => $this->when($this->product_type == 'variable', [
                 [
                     "id" => 8,
@@ -56,7 +56,7 @@ class ProductResource extends JsonResource
                 'thumbnail' => optional($this->getMedia('images')->where('custom_properties.fav', true)->first())->getFullUrl('thumbnail'),
             ],
             'gallery' => ProductGalleryResource::collection($this->getMedia('images')),
-            'reviews' => ProductReviewResource::collection($this->reviews)
+            'reviews' => ProductReviewResource::collection($this->reviews()->where('status', 1)->get())
         ];
     }
 }

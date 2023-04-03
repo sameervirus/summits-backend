@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('name');
             $table->string('email');
+            $table->integer('status')->nullable();
             $table->timestamps();            
         });
     }

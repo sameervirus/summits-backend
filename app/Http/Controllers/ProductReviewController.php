@@ -15,7 +15,10 @@ class ProductReviewController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Product Review';
+        $titles = 'Product Reviews';
+        $items = ProductReview::all();
+        return view('admin.products.review', compact('items', 'title', 'titles'));
     }
 
     /**
@@ -85,9 +88,16 @@ class ProductReviewController extends Controller
      * @param  \App\Models\ProductReview  $productReview
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-      
+        $request->validate([
+            'id' => 'required|exists:product_reviews,id',
+            'status' => 'required',
+        ]);
+
+        ProductReview::where('id', $request->id)->update(['status' => $request->status]);
+
+        return redirect()->route('admin.review');      
     }
 
     /**
