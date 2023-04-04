@@ -64,8 +64,11 @@ class AddressController extends Controller
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
         }
 
+        $user = Auth::user();
+
         return response()->json([
             'status' => 'success',
+            'addresses' => AddressResource::collection($user->addresses),
             'message' => __('success'),
         ]);
     }

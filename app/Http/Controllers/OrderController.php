@@ -20,6 +20,8 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $orders = Auth::user()->orders;
+        if($orders->count() < 1) return [];
         return OrderResource::collection(Auth::user()->orders);
     }
 
@@ -117,6 +119,19 @@ class OrderController extends Controller
                        "payment_option" => "credit-card"
                     ];
                 }
+            } else {
+                DB::commit();
+                $code = rand(100,999);
+                $code .= str_replace('-', '', date('y-m-d'));
+                $code .= $user->id;
+                $code .= $order->id;
+                $order->paymob_order = $code;
+                $order->save();
+                return [
+                    "order" => $code,
+                    "status" => "success",
+                    "payment_option" => "cash-delivery"
+                ];
             }
             
         } catch (\Throwable $th) {
