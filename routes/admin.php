@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\SiteContent\SitecontentController;
 use App\Http\Controllers\Admin\TagAdminController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,7 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
 
     Route::resource("groups", GroupAdminController::class, ['as' => 'admin']);
     Route::resource("sitecontent", SitecontentController::class, ['as' => 'admin']);
+    Route::resource("coupons", CouponController::class, ['as' => 'admin']);
 
     Route::get("/product-review", [ProductReviewController::class, 'index'])->name('admin.review');
     Route::post("/product-review", [ProductReviewController::class, 'update'])->name('admin.review.update');
@@ -68,7 +70,7 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
 
     // Route::resource("posts", PostController::class);
 
-    Route::get("/feedbacks", "Admin\AdminController@feedbacks")->name(
+    Route::get("/feedbacks", [AdminController::class, "feedbacks"])->name(
         "feedbacks.index"
     );
 });

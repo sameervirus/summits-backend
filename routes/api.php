@@ -49,6 +49,7 @@ Route::get('menus', [CommonController::class, 'menus']);
 Route::get('static-content', [SitecontentController::class, 'create']);
 
 Route::post('ask-price', [AskPriceController::class, 'store']);
+Route::post('feedback', [CommonController::class, 'feedback']);
 
 Route::resource('products', ProductController::class)->scoped(['product' => 'slug']);
 Route::resource('groups', GroupProductController::class)->scoped(['group' => 'slug']);
@@ -59,7 +60,8 @@ Route::resource('applications', ApplicationController::class)->scoped(['applicat
 Route::resource('banners', BannerController::class);
 Route::resource('reviews', ProductReviewController::class);
 
-// Product spical
+// Product
+Route::get('search', [ProductController::class, 'search']);
 Route::get('best-seller', [ProductController::class, 'bestseller']);
 
 Route::get('fake/{file}', function()

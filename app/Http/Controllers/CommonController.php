@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\BrandResource;
 use App\Http\Resources\GovernorateResource;
+use App\Models\Admin\SiteContent\Sitecontent;
 use App\Models\Application;
 use App\Models\Brand;
 use App\Models\City;
@@ -13,6 +14,8 @@ use App\Models\Status;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CommonController extends Controller
 {
@@ -83,5 +86,49 @@ class CommonController extends Controller
         if($contacts) array_push($return, $contacts);
 
         return $return;
+    }
+
+    public function feedback(Request $request)
+    {
+        $return_message = '';
+        $status = 'success';
+
+        if ($request->isMethod('post') && ! $request->has('name')) {
+            $email = $request->input('email');
+
+            DB::table('form_submissions')->insert([
+                'type' => 'newsletter',
+                'email' => $email,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            $return_message = 'Thank you for subscribing to our newsletter!';
+
+        } elseif ($request->isMethod('post') && $request->has('name', 'email', 'phone', 'message')) {
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $phone = $request->input('phone');
+            $message = $request->input('message');
+
+            DB::table('form_submissions')->insert([
+                'type' => 'contact_us',
+                'name' => $name,
+                'email' => $email,
+                'phone' => $phone,
+                'message' => $message,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            $return_message = 'Your message has been sent!';
+        } else {
+            $status = 'error';
+        }
+
+        return [
+            'message' => $return_message,
+            'status' => $status,
+        ];
     }
 }

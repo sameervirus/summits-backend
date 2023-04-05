@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\SiteContent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\SiteContent\Sitecontent;
+use App\Models\Category;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -48,6 +49,15 @@ class SitecontentController extends Controller
                 $return[$item->code] = $arabic ? $item->content_arabic : $item->content_english;
             }
         }
+        $categories = Category::whereNull('parent_id')->get();
+        $transformedArray = collect($categories)->map(function ($item) {
+            return [
+                'id' => $item['id'],
+                'title' => $item['name'],
+                'path' => '/search?category='. $item['slug']
+            ];
+        })->all();
+        $return['categories'] = $transformedArray;
         return $return;
     }
 

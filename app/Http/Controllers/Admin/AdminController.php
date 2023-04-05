@@ -80,7 +80,7 @@ class AdminController extends Controller
 
     public function feedbacks()
     {
-        $items = DB::table('feedbacks')->paginate(15);
+        $items = DB::table('form_submissions')->paginate(15);
         return view('admin.feedbacks.index', compact('items'));
     }
 

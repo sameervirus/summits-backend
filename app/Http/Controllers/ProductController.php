@@ -158,4 +158,30 @@ class ProductController extends Controller
                             ->get();
         return ProductResource::collection($products);
     }
+
+    public function search(Request $request) {
+        $query = $request->q;
+        if($query == '') return [];
+        $products = Product::where('name_english', 'like', '%'.$query.'%')
+                            ->orWhere('name_arabic', 'like', '%'.$query.'%')
+                            ->orWhereHas('categories', function($q) use ($query) {
+                                $q->where('name_english', 'like', '%'.$query.'%')
+                                    ->orWhere('name_arabic', 'like', '%'.$query.'%');
+                            })
+                            ->orWhereHas('applications', function($q) use ($query) {
+                                $q->where('name_english', 'like', '%'.$query.'%')
+                                    ->orWhere('name_arabic', 'like', '%'.$query.'%');
+                            })
+                            ->orWhereHas('tags', function($q) use ($query) {
+                                $q->where('name_english', 'like', '%'.$query.'%')
+                                    ->orWhere('name_arabic', 'like', '%'.$query.'%');
+                            })
+                            ->orWhereHas('brand', function($q) use ($query) {
+                                $q->where('name_english', 'like', '%'.$query.'%')
+                                    ->orWhere('name_arabic', 'like', '%'.$query.'%');
+                            })
+                            ->take(10)
+                            ->get();
+        return ProductResource::collection($products);
+    }
 }

@@ -24,6 +24,7 @@
                 <ul class="nav child_menu">
                     <li><a href="{{route('admin.groups.index')}}">Groups</a></li>
                     <li><a href="{{route('admin.review')}}">Products Reviews</a></li>
+                    <li><a href="{{route('admin.coupons.index')}}">Coupons</a></li>
 				</ul>
             </li>
 
@@ -34,16 +35,16 @@
                     <li><a href="{{route('admin.categories.index')}}">Categories</a></li>
                     <li><a href="{{route('admin.tags.index')}}">Tags</a></li>
                     <li><a href="{{route('admin.applications.index')}}">Applications</a></li>
-                    <!-- <li><a href="{{route('feedbacks.index')}}">رسائل الموقع</a></li> -->
+                    <!--  -->
                 </ul>
             </li>
-        <!--
+        
 			<li><a><i class="fa fa-envelope"></i> رسائل من العملاء <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="{{url('admin/message')}}">الرسائل</a></li>
+                    <li><a href="{{route('feedbacks.index')}}">رسائل الموقع</a></li>
                 </ul>
             </li>
-        -->
+       
 
             @can('users_manage')
             <li><a><i class="fa fa-users"></i>Users<span class="fa fa-chevron-down"></span></a>
