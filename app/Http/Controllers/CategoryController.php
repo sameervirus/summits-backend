@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Categories\CategoriesResources;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -45,9 +47,11 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show($id)
     {
-
+        $id = $id - 1;
+        $categories = Category::whereNull('parent_id')->with('childs')->take(2)->get();
+        return new CategoriesResources($categories[$id]);
     }
 
     /**
@@ -56,9 +60,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
-        //
+        $categories = Category::where('id', $id)->orWhere('parent_id', $id)->pluck('id')->toArray();
+        $products = Product::whereHas('categories', function ($q) use ($categories) {
+                        $q->whereIn('id', $categories);
+                    })->take(12)->get();
+
+        return ProductResource::collection($products);
     }
 
     /**

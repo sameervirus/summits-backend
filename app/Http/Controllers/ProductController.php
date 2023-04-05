@@ -50,9 +50,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
+        $wishes = Auth::user()->wishes;
 
-        return ProductResource::collection($user->wishes);
+        if($wishes->count() < 1) return [];
+
+        return ProductResource::collection($wishes);
     }
 
     /**
@@ -150,7 +152,10 @@ class ProductController extends Controller
 
     public function bestseller()
     {
-        $products = Product::take(12)->get();
+        $products = Product::withCount('orders')
+                            ->orderByDesc('orders_count')
+                            ->take(12)
+                            ->get();
         return ProductResource::collection($products);
     }
 }

@@ -33,6 +33,7 @@ Route::middleware(['auth'])->get('/user', function (Request $request) {
 });
 Route::middleware(['auth'])->group(function () {
     Route::post('addresses', [AddressController::class, 'store']);
+    Route::get('addresses', [AddressController::class, 'index']);
     Route::resource('users', UserController::class);
     Route::get('orders/{paymob_order}', [OrderController::class, "show"]);
     Route::get('orders', [OrderController::class, "index"]);
@@ -41,7 +42,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('wishlist', [ProductController::class, "create"]);
 });
 Route::post('complete', [OrderController::class, "update"]);
-Route::get('addresses', [AddressController::class, 'index']);
 Route::get('governorates', [CommonController::class, 'governorates']);
 Route::get('cities', [CommonController::class, 'cities']);
 Route::get('status', [CommonController::class, 'status']);
