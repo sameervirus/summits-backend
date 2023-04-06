@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coupon;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CouponController extends Controller
 {
@@ -74,9 +76,16 @@ class CouponController extends Controller
     public function show($code)
     {
         $coupon = Coupon::where('code', $code)->first();
+        $applied = Order::where('coupon', $code)
+                        ->where('user_id', Auth::id())
+                        ->first();
         
         // Check if the coupon is valid
-        if(!$coupon || !$coupon->active || $coupon->expires_at < now()) {
+        if(!$coupon 
+            || !$coupon->active 
+            || $coupon->expires_at < now()
+            || $applied
+        ) {
             return response()->json([
                 'message' => 'Coupon is not valid.',
             ], 400);

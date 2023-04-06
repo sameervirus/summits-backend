@@ -8,6 +8,7 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommonController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\GroupProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -47,6 +48,7 @@ Route::get('cities', [CommonController::class, 'cities']);
 Route::get('status', [CommonController::class, 'status']);
 Route::get('menus', [CommonController::class, 'menus']);
 Route::get('static-content', [SitecontentController::class, 'create']);
+Route::get('coupon/{code}', [CouponController::class, 'show']);
 
 Route::post('ask-price', [AskPriceController::class, 'store']);
 Route::post('feedback', [CommonController::class, 'feedback']);
