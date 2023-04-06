@@ -88,6 +88,8 @@ class OrderController extends Controller
                 "payment_gateway" => $payment,
                 "total" => $total,
                 "notes" => $request->notes,
+                "coupon" => $request->coupon,
+                "discount" => $request->discount,
                 "shipping_fee" => $request->shipping,
                 "user_id" => $request->user_id,
                 "fname" => $user->fname,

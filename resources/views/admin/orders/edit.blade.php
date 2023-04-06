@@ -1,10 +1,36 @@
 @extends('admin.admin')
 
-@section('title', 'Feedback')
+@section('title', $title)
 
-@section('cssFiles')
-<style type="text/css">
-</style>
+@section ('cssFiles')
+<link rel="stylesheet" href="{{asset('vendors/bootstrap-multiselect/dist/css/bootstrap-multiselect.css')}}" type="text/css"/>
+    <style type="text/css">
+      .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+      }
+      .inputfile + label {
+          font-size: 1.25em;
+          font-weight: 700;
+          color: white;
+          background-color: black;
+          display: inline-block;
+          padding: 0 20px;
+      }
+
+      .inputfile:focus + label,
+      .inputfile + label:hover {
+          background-color: red;
+      }
+      .inputfile + label {
+        cursor: pointer; /* "hand" cursor */
+      }
+      .thumbnail .image {min-height: 120px!important;}
+    </style>
 @endsection
 
 @section('content')
@@ -12,7 +38,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Website Feedback<small></small></h3>
+                <h3>{{$title}}<small></small></h3>
             </div>
             <div class="title_right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
@@ -47,7 +73,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Website Feedback <small></small></h2>
+                        <h2>{{$title}} <small></small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -60,40 +86,42 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <div class="table-responsive">
-                            <table class="table table-striped jambo_table">
-                                <thead>
-                                    <tr class="headings">
-                                    <th>#</th>
-                                    <th>Type</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Message</th>
-                                    <th>Date Submitted</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="lisEelement">
-                                   @foreach($items as $submission)
-                                    <tr class="even pointer">
-                                    <td>{{ $submission->id }}</td>
-                                    <td>{{ $submission->type }}</td>
-                                    <td>{{ $submission->name ?? '-' }}</td>
-                                    <td>{{ $submission->email }}</td>
-                                    <td>{{ $submission->phone ?? '-' }}</td>
-                                    <td>{{ $submission->message ?? '-' }}</td>
-                                    <td>{{ $submission->created_at }}</td>
-                                    </tr>
-                                   @endforeach
-                                </tbody>
-                            </table>
-                            {{ $items->links() }}
+                        @if(@$item)
+                        <form
+                            class="form-horizontal"
+                            role="form"
+                            method="POST"
+                            action="{{route('admin.coupons.update', $item) }}">
+                            {{ method_field('PUT') }}
+                        @else
+
+                        <form class="form-horizontal" role="form" method="POST" action="{{route('admin.coupons.store')}}">
+
+                        @endif
+
+                            {{ csrf_field() }}
+
+                            @include('admin.coupons.form')
+
+                            <a href="{{route('admin.coupons.index')}}" type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                            <button type="submit" class="btn btn-primary">Save</button>
+
+                        </form>
                         </div>
                     </div>
                 </div>
+                 <hr/>
+
             </div>
         </div>
     </div>
 </div>
+
+@endsection
+
+@section('jsFiles')
+
+    <!-- iCheck -->
+    <script src="{{asset('vendors/iCheck/icheck.min.js')}}"></script>
 
 @endsection

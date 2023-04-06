@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\ApplicationAdminController;
 use App\Http\Controllers\Admin\BannerAdminController;
 use App\Http\Controllers\Admin\BrandAdminController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\SiteContent\SitecontentController;
 use App\Http\Controllers\Admin\TagAdminController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,7 +45,7 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
     Route::get("/product-review", [ProductReviewController::class, 'index'])->name('admin.review');
     Route::post("/product-review", [ProductReviewController::class, 'update'])->name('admin.review.update');
 
-
+    Route::resource("orders", AdminOrderController::class, ['as' => 'admin']);
 
 
 

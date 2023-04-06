@@ -39,6 +39,12 @@
                 </ul>
             </li>
         
+			<li><a><i class="fa fa-first-order"></i> Orders <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="{{route('admin.orders.index')}}">Orders</a></li>
+                </ul>
+            </li>
+        
 			<li><a><i class="fa fa-envelope"></i> رسائل من العملاء <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{{route('feedbacks.index')}}">رسائل الموقع</a></li>
