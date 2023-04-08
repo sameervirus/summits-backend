@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('orders/{paymob_order}', [OrderController::class, "show"]);
     Route::get('orders', [OrderController::class, "index"]);
     Route::post('orders', [OrderController::class, "store"]);
+    Route::delete('orders/{id}', [OrderController::class, "destroy"]);
     Route::post('wishlist', [ProductController::class, "store"]);
     Route::get('wishlist', [ProductController::class, "create"]);
 });

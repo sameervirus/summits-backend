@@ -295,9 +295,53 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Order $order)
+    public function destroy($id)
     {
-        //
+        $order = Order::find($id);
+  
+        if($order->status_id != 1) {
+            return response()->json([
+                'message' => 'Order cannot be canceled',
+            ], 400);
+        }
+
+        if($order->payment_gateway == 'credit-card') {
+            $token = $this->getToken($order->products, $order->paymob_amount * 100, Auth::user());
+            
+            if($token && $order->paymob_id) {
+
+                $refund = Http::post('https://accept.paymob.com/api/acceptance/void_refund/refund', [
+                    "auth_token" => $token,
+                    "transaction_id" => $order->paymob_id,
+                    "amount_cents" => $order->paymob_amount * 100
+                ]);
+
+
+                // if(!@$refund || !@$refund['success']) {
+                //     return response()->json([
+                //         'message' => 'Please contact our customer service for more information',
+                //     ], 400);
+                // } else {
+                    DB::table('refunds')->insert([
+                        'user_id' => Auth::id(),
+                        'order_id' => $order->paymob_order,
+                        'order' => json_encode($order),
+                        'refund_response' => json_encode($refund),
+                    ]);
+                // }
+            }
+        }
+        $order->products()->detach();
+        if($order->delete()) {
+            
+            return response()->json([
+                'message' => 'Order canceled successfully',
+            ], 201);
+        }
+
+        return response()->json([
+            'message' => 'server error',
+        ], 500);
     }
 
     /**
