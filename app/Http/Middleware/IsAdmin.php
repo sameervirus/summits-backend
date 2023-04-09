@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class DetectLocale
+class IsAdmin
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,9 @@ class DetectLocale
      */
     public function handle(Request $request, Closure $next)
     {
-        $language = $request->headers->get('Accept-Language');
-        if ($language ) {
-            app()->setLocale($language);
+        if (auth()->check() && auth()->id() == 1) {
+            return $next($request);
         }
-
-        return $next($request);
+        return abort(401);
     }
 }

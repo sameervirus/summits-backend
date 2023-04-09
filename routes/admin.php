@@ -18,16 +18,15 @@ use App\Http\Controllers\Admin\BannerAdminController;
 use App\Http\Controllers\Admin\BrandAdminController;
 use App\Http\Controllers\Admin\CategoryAdminController;
 use App\Http\Controllers\Admin\GroupAdminController;
-use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\SiteContent\SitecontentController;
 use App\Http\Controllers\Admin\TagAdminController;
+use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CouponController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
+Route::group(["middleware" => ["auth:web","admin:web"], "prefix" => "admin"], function () {
 
     Route::resource("brands", BrandAdminController::class, ['as' => 'admin']);
     Route::resource("categories", CategoryAdminController::class, ['as' => 'admin']);
@@ -46,6 +45,9 @@ Route::group(["middleware" => ["auth:web"], "prefix" => "admin"], function () {
     Route::post("/product-review", [ProductReviewController::class, 'update'])->name('admin.review.update');
 
     Route::resource("orders", AdminOrderController::class, ['as' => 'admin']);
+
+    Route::get('/governorates', [CommonController::class, 'geverIndex'])->name('governorates.index');
+    Route::put('/governorates/{id}', [CommonController::class, 'geverUpdates'])->name('governorates.update');
 
 
 

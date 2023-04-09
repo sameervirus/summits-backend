@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Client\RequestException;
@@ -102,6 +103,9 @@ class OrderController extends Controller
             ]);
 
             foreach ($request->items as $item) {
+                $product = Product::find($item['id']);
+                $product->quantity -= $item['quantity'];
+                $product->save();
                 $order->products()->attach($item['id'], [
                     'name' => $item['name'],
                     'quantity' => $item['quantity'],

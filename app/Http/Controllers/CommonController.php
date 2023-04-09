@@ -23,6 +23,21 @@ class CommonController extends Controller
         return GovernorateResource::collection(Governorate::all());
     }
 
+    public function geverIndex() {
+        $items = Governorate::all();
+        $title = "Governorate";
+        $titles= "Governorates";
+        return view('admin.governorates.index', compact('items', 'title', 'titles'));
+    }
+
+    public function geverUpdates(Request $request, $id) {
+        $governorate = Governorate::findOrFail($id);
+        $governorate->shipping_fees = $request->input('shipping_fees');
+        $governorate->save();
+
+        return redirect()->route('governorates.index');
+    }
+
     public function cities(Request $request) {
         return City::where('governorate_id', request('governorate_id'))->get();
     }

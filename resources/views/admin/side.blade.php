@@ -10,7 +10,8 @@
             </li>
             <li><a><i class="fa fa-edit"></i>Main Content<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-
+                    <li><a href="{{url('/admin/site-content')}}">Site Content</a></li>
+                    <li><a href="{{route('governorates.index')}}">Governorates</a></li>
                 </ul>
             </li>
 

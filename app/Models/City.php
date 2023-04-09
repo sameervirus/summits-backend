@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 
 class City extends Model
 {
@@ -25,7 +26,7 @@ class City extends Model
 
     public function getLabelAttribute()
     {
-        return $this->city_name_ar;
+        return App::getLocale() == 'ar' ? $this->city_name_ar : $this->city_name_en;
     }
 
     public function governorate()

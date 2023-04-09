@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\App;
 
 class GovernorateResource extends JsonResource
 {
@@ -23,7 +24,7 @@ class GovernorateResource extends JsonResource
     {
         return [
             'value' => $this->id,
-            'label' => $this->governorate_name_ar,
+            'label' => App::getLocale() == 'ar' ? $this->governorate_name_ar : $this->governorate_name_en,
             'label_en' => $this->governorate_name_en,
             'cities' => $this->cities
         ];
