@@ -54,7 +54,8 @@ Route::group(["middleware" => ["auth:web","admin:web"], "prefix" => "admin"], fu
 
 
 
-    Route::get("/", [SitecontentController::class, 'index']);
+    Route::get("/", [AdminController::class, 'index']);
+    Route::get("/site-content", [SitecontentController::class, 'index']);
 
     // Route::post("/reorder", "Admin\AdminController@reorder")->name("reorder");
     // Route::post("/preorder", "Admin\AdminController@preorder")->name(
