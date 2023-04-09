@@ -4,18 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\BrandResource;
 use App\Http\Resources\GovernorateResource;
-use App\Models\Admin\SiteContent\Sitecontent;
 use App\Models\Application;
 use App\Models\Brand;
 use App\Models\City;
 use App\Models\Governorate;
 use App\Models\Group;
 use App\Models\Status;
-use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 class CommonController extends Controller
 {
@@ -48,8 +45,8 @@ class CommonController extends Controller
 
     public function menus() {
         $groups = App::getLocale() == 'ar'
-                    ? Group::select('id','title_arabic as label', 'slug as path')->get()->take(3)
-                    : Group::select('id','title_english as label', 'slug as path')->get()->take(3);
+                    ? Group::select(DB::raw('id, CONCAT("/gp/", slug) as path, title_arabic as label'))->get()->take(3)
+                    : Group::select(DB::raw('id, CONCAT("/gp/", slug) as path, title_english as label'))->get()->take(3);
 
         $brands = [
             'id' => 1000,

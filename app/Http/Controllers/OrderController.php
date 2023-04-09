@@ -335,6 +335,11 @@ class OrderController extends Controller
                 // }
             }
         }
+        foreach ($order->products() as $item) {
+            $product = Product::find($item['id']);
+            $product->quantity += $item['quantity'];
+            $product->save();
+        }
         $order->products()->detach();
         if($order->delete()) {
             

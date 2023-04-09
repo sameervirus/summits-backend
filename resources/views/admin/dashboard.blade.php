@@ -26,9 +26,29 @@
               <h3 class="box-title">Sales by Time Period</h3>
             </div>
             <div class="x_content">
-              <div class="chart">
-                <canvas id="sales-chart" style="height:250px"></canvas>
+            <ul class="nav nav-tabs" id="salesTabs">
+              <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#monthlySales">Monthly</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#weeklySales">Weekly</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#dailySales">Daily</a>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <div class="tab-pane active" id="monthlySales">
+                <canvas id="monthlySalesChart"></canvas>
               </div>
+              <div class="tab-pane" id="weeklySales">
+                <canvas id="weeklySalesChart"></canvas>
+              </div>
+              <div class="tab-pane" id="dailySales">
+                <canvas id="dailySalesChart"></canvas>
+              </div>
+            </div>
             </div>
             <!-- /.x_content -->
           </div>
@@ -95,157 +115,85 @@
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 	<script>
-		$(function () {
-  'use strict'
+		const monthlySalesCtx = document.getElementById('monthlySalesChart').getContext('2d');
+    const weeklySalesCtx = document.getElementById('weeklySalesChart').getContext('2d');
+    const dailySalesCtx = document.getElementById('dailySalesChart').getContext('2d');
 
-  var ticksStyle = {
-    fontColor: '#495057',
-    fontStyle: 'bold'
-  }
+    const monthData = {!! json_encode($salesReport['monthlySales']) !!};
+    const labels = monthData.map(item => item.month);
+    const salesData = monthData.map(item => item.sales);
 
-  var mode      = 'index'
-  var intersect = true
+    const weekData = {!! json_encode($salesReport['weeklySales']) !!};
+    const weeklabels = weekData.map(item => item.week);
+    const weeksalesData = weekData.map(item => item.sales);
 
-  var $salesChart = $('#sales-chart')
-  var salesChart  = new Chart($salesChart, {
-    type   : 'bar',
-    data   : {
-      labels  : [
-        @foreach($salesReport['labels'] as $month)
-          "{{$month}}",
-        @endforeach
-      ],
-      datasets: [
-        {
-          backgroundColor: '#007bff',
-          borderColor    : '#007bff',
-          data           : [
-            @foreach($salesReport['currentYearSales'] as $currentYearSales)
-              {{$currentYearSales}},
-            @endforeach
-          ]
-        },
-        {
-          backgroundColor: '#ced4da',
-          borderColor    : '#ced4da',
-          data           : [
-            @foreach($salesReport['previousYearSales'] as $previousYearSales)
-              {{$previousYearSales}},
-            @endforeach
-          ]
+    const dailySales = {!! json_encode($salesReport['dailySales']) !!};
+    const dailylabels = dailySales.map(item => item.day);
+    const dailysalesData = dailySales.map(item => item.sales);
+
+    // Display monthly sales data in a bar chart using Chart.js
+    const monthlySalesChart = new Chart(monthlySalesCtx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Sales',
+          data: salesData,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
         }
-      ]
-    },
-    options: {
-      maintainAspectRatio: false,
-      tooltips           : {
-        mode     : mode,
-        intersect: intersect
-      },
-      hover              : {
-        mode     : mode,
-        intersect: intersect
-      },
-      legend             : {
-        display: false
-      },
-      scales             : {
-        yAxes: [{
-          // display: false,
-          gridLines: {
-            display      : true,
-            lineWidth    : '4px',
-            color        : 'rgba(0, 0, 0, .2)',
-            zeroLineColor: 'transparent'
-          },
-          ticks    : $.extend({
-            beginAtZero: true,
-
-            // Include a dollar sign in the ticks
-            callback: function (value, index, values) {
-              if (value >= 1000) {
-                value /= 1000
-                value += 'k'
-              }
-              return '$' + value
-            }
-          }, ticksStyle)
-        }],
-        xAxes: [{
-          display  : true,
-          gridLines: {
-            display: false
-          },
-          ticks    : ticksStyle
-        }]
       }
-    }
-  })
+    });
 
-  var $visitorsChart = $('#visitors-chart')
-  var visitorsChart  = new Chart($visitorsChart, {
-    data   : {
-      labels  : ['18th', '20th', '22nd', '24th', '26th', '28th', '30th'],
-      datasets: [{
-        type                : 'line',
-        data                : [100, 120, 170, 167, 180, 177, 160],
-        backgroundColor     : 'transparent',
-        borderColor         : '#007bff',
-        pointBorderColor    : '#007bff',
-        pointBackgroundColor: '#007bff',
-        fill                : false
-        // pointHoverBackgroundColor: '#007bff',
-        // pointHoverBorderColor    : '#007bff'
-      },
-        {
-          type                : 'line',
-          data                : [60, 80, 70, 67, 80, 77, 100],
-          backgroundColor     : 'tansparent',
-          borderColor         : '#ced4da',
-          pointBorderColor    : '#ced4da',
-          pointBackgroundColor: '#ced4da',
-          fill                : false
-          // pointHoverBackgroundColor: '#ced4da',
-          // pointHoverBorderColor    : '#ced4da'
+    const weeklySalesChart = new Chart(weeklySalesCtx, {
+      type: 'bar',
+      data: {
+        labels: weeklabels,
+        datasets: [{
+          label: 'Sales',
+          data: weeksalesData,
+          backgroundColor: 'rgba(154, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
         }]
-    },
-    options: {
-      maintainAspectRatio: false,
-      tooltips           : {
-        mode     : mode,
-        intersect: intersect
       },
-      hover              : {
-        mode     : mode,
-        intersect: intersect
-      },
-      legend             : {
-        display: false
-      },
-      scales             : {
-        yAxes: [{
-          // display: false,
-          gridLines: {
-            display      : true,
-            lineWidth    : '4px',
-            color        : 'rgba(0, 0, 0, .2)',
-            zeroLineColor: 'transparent'
-          },
-          ticks    : $.extend({
-            beginAtZero : true,
-            suggestedMax: 200
-          }, ticksStyle)
-        }],
-        xAxes: [{
-          display  : true,
-          gridLines: {
-            display: false
-          },
-          ticks    : ticksStyle
-        }]
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
       }
-    }
-  })
-})
+    });
+
+    const dailySalesChart = new Chart(dailySalesCtx, {
+      type: 'bar',
+      data: {
+        labels: dailylabels,
+        datasets: [{
+          label: 'Sales',
+          data: dailysalesData,
+          backgroundColor: 'rgba(154, 162, 35, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+      
 	</script>
 @endsection
