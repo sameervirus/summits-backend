@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -18,7 +19,8 @@ class AdminController extends Controller
 
     public function index()
     {
-        return view('admin.dashboard');
+        $salesReport = $this->salesReport();
+        return view('admin.dashboard', compact('salesReport'));
     }
 
     public function upload_img(Request $request)
@@ -81,7 +83,50 @@ class AdminController extends Controller
     public function feedbacks()
     {
         $items = DB::table('form_submissions')->paginate(15);
-        return view('admin.feedbacks.index', compact('items'));
+            return view('admin.feedbacks.index', compact('items'));
+        
+    }
+
+    private function salesReport() {
+        $currentYear = date('Y');
+        $previousYear = $currentYear - 1;
+        $currentMonth = date('n');
+        $lastSixMonths = range($currentMonth - 5, $currentMonth);
+
+        $currentYearSales = Order::select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total) as sales'))
+            ->whereYear('created_at', $currentYear)
+            ->whereIn(DB::raw('MONTH(created_at)'), $lastSixMonths)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('sales')
+            ->toArray();
+
+        $previousYearSales = Order::select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total) as sales'))
+            ->whereYear('created_at', $previousYear)
+            ->whereIn(DB::raw('MONTH(created_at)'), $lastSixMonths)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('sales')
+            ->toArray();
+
+        $monthLabels = [];
+        foreach ($lastSixMonths as $month) {
+            $dateObj = \DateTime::createFromFormat('!m', $month);
+            if ($dateObj !== false) {
+                $monthName = $dateObj->format('M');
+            } else {
+                $monthName = 'N/A';
+            }
+            $monthLabels[] = $monthName;
+        }
+
+        $result = [
+            'labels' => $monthLabels,
+            'previousYearSales' => $previousYearSales,
+            'currentYearSales' => $currentYearSales,
+        ];
+
+        return $result;
     }
 
 }

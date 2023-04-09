@@ -42,7 +42,9 @@ class RegisteredUserController extends Controller
 
         return response([
             'token' => $token,
-            'permissions' => $user->getAllPermissions()->pluck('name')->toArray()
+            'permissions' => $user->getAllPermissions()->pluck('name')->toArray(),
+            'user' => $user,
+            'wishlist' => $user->wishes->pluck('id')->toArray(),
         ]);
     }
 }
