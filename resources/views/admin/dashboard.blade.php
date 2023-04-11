@@ -27,27 +27,28 @@
             </div>
             <div class="x_content">
             <ul class="nav nav-tabs" id="salesTabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#dailySales">Daily</a>
+              </li>
               <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#monthlySales">Monthly</a>
+                <a class="nav-link" data-toggle="tab" href="#monthlySales">Monthly</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#weeklySales">Weekly</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#dailySales">Daily</a>
-              </li>
             </ul>
 
             <div class="tab-content">
-              <div class="tab-pane active" id="monthlySales">
-                <canvas id="monthlySalesChart"></canvas>
+            <div class="tab-pane active" id="dailySales">
+                <canvas id="dailySalesChart" style="max-height:250px"></canvas>
+              </div>
+              <div class="tab-pane" id="monthlySales">
+                <canvas id="monthlySalesChart" style="max-height:250px"></canvas>
               </div>
               <div class="tab-pane" id="weeklySales">
-                <canvas id="weeklySalesChart"></canvas>
+                <canvas id="weeklySalesChart" style="max-height:250px"></canvas>
               </div>
-              <div class="tab-pane" id="dailySales">
-                <canvas id="dailySalesChart"></canvas>
-              </div>
+              
             </div>
             </div>
             <!-- /.x_content -->
@@ -57,12 +58,12 @@
           <!-- DONUT CHART -->
           <div class="dashboard_graph x_panel">
             <div class="x_title with-border">
-              <h3 class="box-title">Visitor Devices</h3>
+              <h3 class="box-title">Sales</h3>
 
 
             </div>
             <div class="x_content">
-              <canvas id="pieChart" style="height:250px"></canvas>
+              <canvas id="product-chart" style="height:250px"></canvas>
             </div>
             <!-- /.x_content -->
           </div>
@@ -74,13 +75,13 @@
           <!-- LINE CHART -->
           <div class="dashboard_graph x_panel">
             <div class="x_title with-border">
-              <h3 class="box-title">Country</h3>
+              <h3 class="box-title">Sales</h3>
 
 
             </div>
             <div class="x_content">
               <div class="chart">
-                <canvas id="lineChart" style="height:250px"></canvas>
+                <canvas id="sales-chart" style="height:278px"></canvas>
               </div>
             </div>
             <!-- /.x_content -->
@@ -196,4 +197,80 @@
     });
       
 	</script>
+
+  <script>
+    var ticksStyle = {
+      fontColor: '#495057',
+      fontStyle: 'bold'
+    }
+
+    var mode      = 'index'
+    var intersect = true
+
+    var $salesChart = $('#sales-chart')
+    var salesChart  = new Chart($salesChart, {
+      type   : 'bar',
+      data   : {
+        labels  : {!! json_encode($compareMonths['labels']) !!},
+        datasets: [
+          {
+            label: 'This Year',
+            backgroundColor: '#007bff',
+            borderColor    : '#007bff',
+            data           : {!! json_encode($compareMonths['thisYear']) !!}
+          },
+          {
+            label: 'Last Year',
+            backgroundColor: '#ced4da',
+            borderColor    : '#ced4da',
+            data           : {!! json_encode($compareMonths['lastYear']) !!}
+          }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        tooltips           : {
+          mode     : mode,
+          intersect: intersect
+        },
+        hover              : {
+          mode     : mode,
+          intersect: intersect
+        },
+        legend             : {
+          display: false
+        },
+        scales             : {
+          yAxes: [{
+            // display: false,
+            gridLines: {
+              display      : true,
+              lineWidth    : '4px',
+              color        : 'rgba(0, 0, 0, .2)',
+              zeroLineColor: 'transparent'
+            },
+            ticks    : $.extend({
+              beginAtZero: true,
+
+              // Include a dollar sign in the ticks
+              callback: function (value, index, values) {
+                if (value >= 1000) {
+                  value /= 1000
+                  value += 'k'
+                }
+                return '$' + value
+              }
+            }, ticksStyle)
+          }],
+          xAxes: [{
+            display  : true,
+            gridLines: {
+              display: false
+            },
+            ticks    : ticksStyle
+          }]
+        }
+      }
+    })
+  </script>
 @endsection

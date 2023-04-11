@@ -77,7 +77,7 @@
                   </ul>
                 </li>
                 <li>
-                  <a href="{{url ('/')}}" target="_blank">
+                  <a href="https://www.summits-shop.com/" target="_blank">
                     Site Preview
                   </a>
                 </li>

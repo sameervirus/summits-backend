@@ -21,7 +21,8 @@ class AdminController extends Controller
     public function index()
     {
         $salesReport = $this->salesReport();
-        return view('admin.dashboard', compact('salesReport'));
+        $compareMonths = $this->compareMonths();
+        return view('admin.dashboard', compact('salesReport', 'compareMonths'));
     }
 
     public function upload_img(Request $request)
@@ -211,6 +212,56 @@ class AdminController extends Controller
         ];
 
         return $result;
+    }
+
+    private function compareMonths()
+    {
+        // This year
+        $thisYearSales = [];
+        $thisYearLabels = [];
+        for ($i = 6; $i >= 1; $i--) {
+            $month = date('M', strtotime("-$i month")); // Get month name for the i-th previous month
+            $thisYearLabels[] = $month;
+            $sales = DB::table('orders')
+                        ->whereRaw('YEAR(created_at) = YEAR(NOW())')
+                        ->whereRaw('MONTH(created_at) = MONTH(NOW())-'.$i)
+                        ->sum('total');
+            $thisYearSales[] = $sales;
+        }
+
+        // Last year
+        $lastYearSales = [];
+        $lastYearLabels = [];
+        for ($i = 6; $i >= 1; $i--) {
+            $month = date('M', strtotime("-$i month")); // Get month name for the i-th previous month
+            $lastYearLabels[] = $month;
+            $sales = DB::table('orders')
+                        ->whereRaw('YEAR(created_at) = YEAR(NOW())-1')
+                        ->whereRaw('MONTH(created_at) = MONTH(NOW())-'.$i)
+                        ->sum('total');
+            $lastYearSales[] = $sales;
+        }
+
+        // Fill in missing months with 0 sales
+        $labels = ['6 months ago', '5 months ago', '4 months ago', '3 months ago', '2 months ago', 'Last month'];
+        for ($i = 0; $i < count($labels); $i++) {
+            if (!isset($thisYearSales[$i])) {
+                $thisYearSales[$i] = 0;
+            }
+            if (!isset($lastYearSales[$i])) {
+                $lastYearSales[$i] = 0;
+            }
+        }
+
+        // Final data
+        $data = [
+            'labels' => $thisYearLabels, // Use this year's labels, which should be the same as last year's
+            'thisYear' => $thisYearSales,
+            'lastYear' => $lastYearSales,
+        ];
+
+        return $data;
+
     }
 
 }
