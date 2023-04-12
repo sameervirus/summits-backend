@@ -213,31 +213,34 @@ class OrderController extends Controller
         if(!$json) return false;
         
         $amount_cents                           = $json->obj->amount_cents;
-        $created_at                             = $json->obj->order->created_at;
+        $created_at                             = $json->obj->created_at;
         $currency                               = $json->obj->order->currency;
-        $error_occured                          = $json->obj->error_occured;
-        $has_parent_transaction                 = $json->obj->has_parent_transaction;
+        $error_occured                          = $json->obj->error_occured ? 'true' : 'false';
+        $has_parent_transaction                 = $json->obj->has_parent_transaction ? 'true' : 'false';
         $obj_id                                 = $json->obj->id;
         $integration_id                         = $json->obj->integration_id;
-        $is_3d_secure                           = $json->obj->is_3d_secure;
-        $is_auth                                = $json->obj->is_auth;
-        $is_capture                             = $json->obj->is_capture;
-        $is_refunded                            = $json->obj->is_refunded;
-        $is_standalone_payment                  = $json->obj->is_standalone_payment;
-        $is_voided                              = $json->obj->is_voided;
+        $is_3d_secure                           = $json->obj->is_3d_secure ? 'true' : 'false';
+        $is_auth                                = $json->obj->is_auth ? 'true' : 'false';
+        $is_capture                             = $json->obj->is_capture ? 'true' : 'false';
+        $is_refunded                            = $json->obj->is_refunded ? 'true' : 'false';
+        $is_standalone_payment                  = $json->obj->is_standalone_payment ? 'true' : 'false';
+        $is_voided                              = $json->obj->is_voided ? 'true' : 'false';
         $order_id                               = $json->obj->order->id;
         $owner                                  = $json->obj->owner;
-        $pending                                = $json->obj->pending;
+        $pending                                = $json->obj->pending ? 'true' : 'false';
         $source_data_pan                        = $json->obj->source_data->pan;
         $source_data_sub_type                   = $json->obj->source_data->sub_type;
         $source_data_type                       = $json->obj->source_data->type;
-        $success                                = $json->obj->success;
+        $success                                = $json->obj->success ? 'true' : 'false';
+
 
         $str = $amount_cents.$created_at.$currency.$error_occured.$has_parent_transaction.$obj_id.$integration_id.$is_3d_secure.$is_auth.$is_capture.$is_refunded.$is_standalone_payment.$is_voided.$order_id.$owner.$pending.$source_data_pan.$source_data_sub_type.$source_data_type.$success;
 
         $secure_hash = $json->hmac;
 
-        return hash_hmac('sha512', $str, env('ACCEPT_HMAC_ID')) == $secure_hash ? true : false;
+        $hamc = hash_hmac('sha512', $str, env('ACCEPT_HMAC_ID'));
+
+        return $hamc == $secure_hash ? true : false;
     }
 
     /**
@@ -281,8 +284,8 @@ class OrderController extends Controller
             'page' => 'kayla',
             'content' => json_encode($json)
         ]);
-
-        // if(! $this->calculateHash($json)) return false;
+        
+        if(! $this->calculateHash($json)) return false;
 
         // save the transaction data to the server
         Order::where('paymob_order', $json->obj->order->id)->update([
@@ -310,29 +313,31 @@ class OrderController extends Controller
         }
 
         if($order->payment_gateway == 'credit-card') {
-            $token = $this->getToken($order->products, $order->paymob_amount * 100, Auth::user());
+            
+            $token = Http::post('https://accept.paymob.com/api/auth/tokens', [
+                "api_key" => env('ACCEPT_API_KEY') 
+            ]);
             
             if($token && $order->paymob_id) {
 
                 $refund = Http::post('https://accept.paymob.com/api/acceptance/void_refund/refund', [
-                    "auth_token" => $token,
+                    "auth_token" => $token['token'],
                     "transaction_id" => $order->paymob_id,
                     "amount_cents" => $order->paymob_amount * 100
                 ]);
 
-
-                // if(!@$refund || !@$refund['success']) {
-                //     return response()->json([
-                //         'message' => 'Please contact our customer service for more information',
-                //     ], 400);
-                // } else {
+                if(!@$refund || !@$refund['success']) {
+                    return response()->json([
+                        'message' => 'Please contact our customer service for more information',
+                    ], 400);
+                } else {
                     DB::table('refunds')->insert([
                         'user_id' => Auth::id(),
                         'order_id' => $order->paymob_order,
                         'order' => json_encode($order),
                         'refund_response' => json_encode($refund),
                     ]);
-                // }
+                }
             }
         }
         foreach ($order->products() as $item) {
@@ -340,9 +345,9 @@ class OrderController extends Controller
             $product->quantity += $item['quantity'];
             $product->save();
         }
-        $order->products()->detach();
-        if($order->delete()) {
-            
+        // $order->products()->detach();
+        $order->status_id = 0;
+        if($order->save()) {
             return response()->json([
                 'message' => 'Order canceled successfully',
             ], 201);

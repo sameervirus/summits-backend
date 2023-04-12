@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('paymob_amount')->nullable();
             $table->string('discount')->nullable();
             $table->string('coupon')->nullable();
+            $table->boolean('refunded')->nullable();
             $table->dateTime('delivery_time')->nullable();
             $table->timestamps();
         });

@@ -8,7 +8,7 @@
         href="{{asset('vendors/jquery-ui-1.12.1/jquery-ui.min.css')}}" />
 
 <style type="text/css">
-    .pointer{cursor: move;}
+    .pointer{cursor: pointer;}
     #sortable { list-style-type: none; margin: 0; padding: 0; }
     #sortable li { margin: 5px 5px 5px 0; padding: 10px; float: left; font-size: 1em; text-align: center; }
 </style>
@@ -77,10 +77,11 @@
                     <label><input type="checkbox" name="columns[]" value="discount" checked data-column="column-discount"> Discount</label> 
                     <label><input type="checkbox" name="columns[]" value="coupon" checked data-column="column-coupon"> Coupon</label> 
                     <label><input type="checkbox" name="columns[]" value="delivery_time" checked data-column="column-delivery_time"> Delivery Time</label> 
+                    <label><input type="checkbox" name="columns[]" value="refunded" checked data-column="column-refunded"> Refunded</label> 
                     <label><input type="checkbox" name="columns[]" value="created_at" checked data-column="column-created_at"> Created At</label> 
                     <label><input type="checkbox" name="columns[]" value="status_id" checked data-column="column-status_id"> Status</label> 
                         <div class="table-responsive">
-                            <table id="orders-table" class="table table-striped jambo_table">
+                            <table id="orders-table" class="table jambo_table">
                                 <thead>
                                     <tr>
                                         <th class="column-id">ID</th>
@@ -97,13 +98,15 @@
                                         <th class="column-discount">Discount</th>
                                         <th class="column-coupon">Coupon</th>
                                         <th class="column-delivery_time">Delivery Time</th>
+                                        <th class="column-refunded">Refunded</th>
                                         <th class="column-created_at">Created At</th>
                                         <th class="column-status_id">Status</th>
+                                        <th class=""></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($orders as $order)
-                                        <tr>
+                                        <tr class="{{ $order->status_id == 4 ? 'bg-success' : ''}}{{ $order->status_id == 0 ? 'bg-danger' : ''}}">
                                             <td class="column-id">{{ $order->id }}</td>
                                             <td class="column-payment_gateway">{{ $order->payment_gateway }}</td>
                                             <td class="column-notes">{{ $order->notes }}</td>
@@ -123,13 +126,15 @@
                                             <td class="column-paymob_order">{{ $order->paymob_order }}</td>
                                             <td class="column-discount">{{ $order->discount }}</td>
                                             <td class="column-coupon">{{ $order->coupon }}</td>
-                                            <td class="column-delivery_time">{{ $order->delivery_time }}</td>
+                                            <td class="column-delivery_time">{{ optional($order->delivery_time)->format('Y-m-d') }}</td>
+                                            <td class="column-refunded">{{ $order->refunded ? 'Yes' : '' }}</td>
                                             <td class="column-created_at">{{ $order->created_at->format('Y-m-d') }}</td>
                                             <td class="column-status_id">
                                                 <form method="POST" action="{{ route('admin.orders.update', $order) }}">
                                                     @csrf
                                                     @method('PUT')
                                                     <select name="status_id" onchange="this.form.submit()">
+                                                        <option value="0" {{ $order->status_id == 0 ? 'selected' : '' }}>Cancel</option>
                                                         <option value="1" {{ $order->status_id == 1 ? 'selected' : '' }}>Pending</option>
                                                         <option value="2" {{ $order->status_id == 2 ? 'selected' : '' }}>Processing</option>
                                                         <option value="3" {{ $order->status_id == 3 ? 'selected' : '' }}>Shipped</option>
@@ -137,7 +142,30 @@
                                                     </select>
                                                 </form>
                                             </td>
+                                            <td><span class="fa fa-angle-down pointer" onclick="openId('order_{{$order->id}}')"></span></td>
                                         </tr>
+                                        @if($order->products->count() > 0)
+                                        <tr id="order_{{$order->id}}" class="addHidden hidden">
+                                            <td colspan="17">
+                                                <table class="table table-bordered">
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Product</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                    </tr>
+                                                    @foreach ($order->products as $product)
+                                                    <tr>
+                                                        <td>{{$product->pivot->product_id}}</td>
+                                                        <td>{{$product->pivot->name}}</td>
+                                                        <td>{{$product->pivot->quantity}}</td>
+                                                        <td>{{$product->pivot->price}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -189,6 +217,7 @@
         });
 
         
+        
     });
     // Handle button click event
     function htmlTableToExcel(type){
@@ -196,6 +225,14 @@
         var excelFile = XLSX.utils.table_to_book(data, {sheet: "sheet1"});
         XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
         XLSX.writeFile(excelFile, 'ExportedFile:HTMLTableToExcel.' + type);
+    }
+
+    function openId(id) {
+        if(!id) return false;
+        $('.addHidden').each(function() {
+            $(this).hasClass('hidden') ? '': $(this).addClass('hidden');
+        })
+        $('#'+ id).toggleClass('hidden');
     }
 </script>
 @endsection

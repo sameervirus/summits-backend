@@ -143,47 +143,4 @@
 
     <!-- iCheck -->
     <script src="{{asset('vendors/iCheck/icheck.min.js')}}"></script>
-    <script src="{{asset('vendors/tinymce/js/tinymce/tinymce.min.js')}}"></script>
-    <script type="text/javascript">
-
-      function readURL(input, id) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#' + id).attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(input.files[0]);
-        }
-      }
-
-      $(".inputfile").change(function(){
-          var img = $(this).data('id');
-          readURL(this, img);
-      });
-
-      @isset($item)
-      $("body").on("click",".image_delete",function (e) {
-        e.preventDefault();
-        if (confirm('Are you sure ?')) {
-          var tr =  $( this ).parents( ".img-frame" );
-          var img = $(this).data('img');
-
-          $.post("{{route('delimg_post')}}",
-          {
-              _token:"{{ csrf_token() }}",
-              id: "{{ $item->id }}",
-              imgs: img
-          }).done(function( data ) {
-            if (data == 'ok') {
-              tr.slideUp('slow').remove();
-            } else {
-              alert ("Server is down please try again");
-            }
-          });
-        }
-      });
-      @endisset
-    </script>
 @endsection

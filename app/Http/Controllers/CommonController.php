@@ -40,7 +40,7 @@ class CommonController extends Controller
     }
 
     public function status() {
-        return Status::all();
+        return Status::where('id', '<>', 0)->get();
     }
 
     public function menus() {

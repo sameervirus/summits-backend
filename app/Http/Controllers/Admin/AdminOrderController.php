@@ -17,7 +17,7 @@ class AdminOrderController extends Controller
     {
         $title = 'Order';
         $titles = 'Orders';
-        $orders = Order::orderBy('created_at', 'desc')->paginate(20);
+        $orders = Order::with('products')->orderBy('created_at', 'desc')->paginate(20);
         return view('admin.orders.index', compact('orders', 'title', 'titles'));
     }
 
@@ -75,6 +75,11 @@ class AdminOrderController extends Controller
     {
         if($request->has('status_id')) $order->status_id = $request->status_id;
         if($request->has('tracking_number')) $order->tracking_number = $request->tracking_number;
+        if($request->has('status_id') && $request->status_id == 4) {
+            $order->delivery_time = now();
+        } else {
+            $order->delivery_time = null;
+        }
         $order->save();
         flash('Order status updated successfully!')->overlay()->success();
         

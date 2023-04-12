@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -22,7 +23,14 @@ class AdminController extends Controller
     {
         $salesReport = $this->salesReport();
         $compareMonths = $this->compareMonths();
-        return view('admin.dashboard', compact('salesReport', 'compareMonths'));
+        $registerUsers = $this->registerUsers();
+        $userCount = User::count();
+        $productsCount = Product::count();
+        $orderCount = Order::where('status_id', '<>', 0)->count();
+        $sales = Order::where('status_id', '<>', 0)->sum('total');
+        return view('admin.dashboard', compact('salesReport', 'compareMonths', 'registerUsers',
+                    'userCount', 'productsCount', 'orderCount', 'sales'
+                ));
     }
 
     public function upload_img(Request $request)
@@ -262,6 +270,37 @@ class AdminController extends Controller
 
         return $data;
 
+    }
+
+    private function registerUsers() {
+        // Get the start and end dates from the request
+        $startDate =  Carbon::now()->subMonth();
+        $endDate = Carbon::now();
+
+        // Query the database to get the number of registered users for each day
+        $users = User::select([
+            DB::raw('DATE(created_at) as date'),
+            DB::raw('COUNT(*) as count')
+        ])
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
+
+        // Calculate the total number of registered users for each day
+        $totalUsers = [];
+        $runningTotal = 0;
+        foreach ($users as $user) {
+            $runningTotal += $user->count;
+            $totalUsers[] = $runningTotal;
+        }
+
+        // Format the data for Chart.js
+        return [
+            'labels' => $users->pluck('date')->toArray(),
+            'values' => $users->pluck('count')->toArray(),
+            'total_users' => $totalUsers
+        ];
     }
 
 }
