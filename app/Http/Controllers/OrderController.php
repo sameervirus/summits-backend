@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderCreated;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\Product;
@@ -80,7 +81,7 @@ class OrderController extends Controller
 
         try {
             DB::beginTransaction();
-            $user         = User::find($request->user_id);
+            $user         = Auth::user();
             $total        = $request->total;
             $items        = collect($request->items);
             $payment      = $request->payment_option;
@@ -139,6 +140,8 @@ class OrderController extends Controller
                     "payment_option" => "cash-delivery"
                 ];
             }
+
+            event(new OrderCreated($order));
             
         } catch (\Throwable $th) {
             DB::rollback();
@@ -287,6 +290,8 @@ class OrderController extends Controller
         
         if(! $this->calculateHash($json)) return false;
 
+        // TODO: send email with transaction id after payment completion
+
         // save the transaction data to the server
         Order::where('paymob_order', $json->obj->order->id)->update([
             "paymob_id" => $json->obj->id,
@@ -340,7 +345,7 @@ class OrderController extends Controller
                 }
             }
         }
-        foreach ($order->products() as $item) {
+        foreach ($order->products as $item) {
             $product = Product::find($item['id']);
             $product->quantity += $item['quantity'];
             $product->save();
@@ -348,6 +353,7 @@ class OrderController extends Controller
         // $order->products()->detach();
         $order->status_id = 0;
         if($order->save()) {
+            // TODO: send email order has been successfully canceled
             return response()->json([
                 'message' => 'Order canceled successfully',
             ], 201);
@@ -358,40 +364,4 @@ class OrderController extends Controller
         ], 500);
     }
 
-    /**
-     * process the order on the gateway side.
-     */
-    public function process(Request $request)
-    {
-        return $request->all();
-        $request->validate([
-            'payment_type' => [
-                'required',
-                'string',
-            ],
-        ]);
-
-        $payment_type = $request->payment_type;
-        $user         = $request->user();
-        $total        = 0; // order total
-
-        // try {
-        //     return (new CreditCard($user))->checkOut($total); // or MobileWallet, etc..
-        // } catch (RequestException $e) {
-        //     return __('something went wrong, please try again later');
-        // }
-    }
-
-    /**
-     * validate and complete the order.
-     *
-     * https://acceptdocs.paymobsolutions.com/docs/transaction-callbacks#transaction-response-callback.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function complete(Request $request)
-    {
-        
-        // return view('paymob::complete');
-    }
 }

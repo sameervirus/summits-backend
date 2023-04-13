@@ -36,6 +36,8 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'remember_token',
     ];
 
+    protected $append = ['name'];
+
     /**
      * The attributes that should be cast.
      *
@@ -55,6 +57,16 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 
     public function wishes() {
         return $this->belongsToMany(Product::class);
+    }
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return $this->attributes['fname'] . ' ' . $this->attributes['lname'];
     }
 
     /**

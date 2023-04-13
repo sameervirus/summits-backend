@@ -10,30 +10,20 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AskPriceMail extends Mailable
+class OrderPlaced extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $name;
-    public $email;
-    public $phone;
-    public $company;
-    public $message;
-    public $product;
+    public $order;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($name, $email, $phone, $company, $message, $product)
+    public function __construct($order)
     {
-        $this->name = $name;
-        $this->email = $email;
-        $this->phone = $phone;
-        $this->company = $company;
-        $this->message = $message;
-        $this->product = $product;
+        $this->order = $order;
     }
 
     /**
@@ -45,7 +35,7 @@ class AskPriceMail extends Mailable
     {
         return new Envelope(
             from: new Address('shop@summits-shop.com', 'Summits Shop'),
-            subject: 'Ask Price Mail',
+            subject: 'Order Placed #' . $this->order->paymob_order,
         );
     }
 
@@ -57,14 +47,13 @@ class AskPriceMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'ask-price',
+            markdown: 'emails.orders.placed',
             with: [
-                'name' => $this->name,
-                'email' => $this->email,
-                'phone' => $this->phone,
-                'company' => $this->company,
-                'inquiry' => $this->message,
-                'product' => $this->product
+                'customerName' => $this->order->user->name,
+                'orderNumber' => $this->order->paymob_order,
+                'orderDate' => $this->order->created_at->format('Y-m-d'),
+                'orderTotal' => $this->order->total,
+                'orderItems' => $this->order->products,
             ]
         );
     }

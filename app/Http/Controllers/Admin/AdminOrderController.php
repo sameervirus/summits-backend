@@ -76,6 +76,7 @@ class AdminOrderController extends Controller
         if($request->has('status_id')) $order->status_id = $request->status_id;
         if($request->has('tracking_number')) $order->tracking_number = $request->tracking_number;
         if($request->has('status_id') && $request->status_id == 4) {
+            // TODO: send email order delivered
             $order->delivery_time = now();
         } else {
             $order->delivery_time = null;

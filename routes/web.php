@@ -1,8 +1,11 @@
 <?php
 
+use App\Events\OrderCreated;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
+use App\Mail\OrderPlaced;
 use App\Models\Admin\Pages\Page;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +45,7 @@ Route::get('/pages', function() {
     return Page::find(2)->content;
     return json_decode(Page::find(2)->content);
 });
-Route::get('/complete-order', function(Request $request) {
-    return $request->all();
+Route::get('/complete-order', function() {
+    $order = Order::latest()->first();
+    return \Mail::to($order->user->email)->send(new OrderPlaced($order));
 });
