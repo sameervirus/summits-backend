@@ -58,8 +58,9 @@
                     <div class="x_title">
                         <h2>{{ $titles }} <small></small></h2>
                         <div class="panel_toolbox">
-                            <button onclick="htmlTableToExcel('xlsx')">Export to Excel</button>
                             <label><input type="checkbox" id="hideCancel"> Hide Cancelled</label>
+                            <label><input type="checkbox" id="hideDeliver"> Hide Delivered</label>
+                            <button onclick="htmlTableToExcel('xlsx')">Export to Excel</button>
 
                         </div>
                         <div class="clearfix"></div>
@@ -108,7 +109,9 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($orders as $order)
-                                        <tr class="{{ $order->status_id == 4 ? 'bg-success' : ''}}{{ $order->status_id == 0 ? 'bg-danger has-cancel' : ''}}">
+                                        <tr class="
+                                                {{ $order->status_id == 4 ? 'bg-success has-delivered' : ''}}
+                                                {{ $order->status_id == 0 ? 'bg-danger has-cancel' : ''}}">
                                             <td class="column-id">{{ $order->id }}</td>
                                             <td class="column-payment_gateway">{{ $order->payment_gateway }}</td>
                                             <td class="column-notes">{{ $order->notes }}</td>
@@ -222,6 +225,13 @@
         $('#hideCancel').change(function() {
             var checked = $(this).is(':checked');     
             $('.has-cancel').each(function() {
+                checked ? $(this).hide() : $(this).show();
+            });            
+        });
+        
+        $('#hideDeliver').change(function() {
+            var checked = $(this).is(':checked');     
+            $('.has-delivered').each(function() {
                 checked ? $(this).hide() : $(this).show();
             });            
         });
