@@ -22,9 +22,10 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Auth::user()->orders;
+        $user = Auth::user();
+        $orders = $user->orders()->orderBy('id', 'desc')->get();
         if($orders->count() < 1) return [];
-        return OrderResource::collection(Auth::user()->orders);
+        return OrderResource::collection($orders);
     }
 
     /**
@@ -134,14 +135,13 @@ class OrderController extends Controller
                 $code .= $order->id;
                 $order->paymob_order = $code;
                 $order->save();
+                event(new OrderCreated($order));
                 return [
                     "order" => $code,
                     "status" => "success",
                     "payment_option" => "cash-delivery"
                 ];
             }
-
-            event(new OrderCreated($order));
             
         } catch (\Throwable $th) {
             DB::rollback();
@@ -290,15 +290,29 @@ class OrderController extends Controller
         
         if(! $this->calculateHash($json)) return false;
 
+        $order = Order::where('paymob_order', $json->obj->order->id)->first();
+        if($json->obj->success == false && $json->obj->pending == false) {
+            foreach ($order->products as $item) {
+                $product = Product::find($item['id']);
+                $product->quantity += $item['quantity'];
+                $product->save();
+            }
+            $order->status_id = 0;
+            $order->save();
+            // TODO: send email with transaction failure
+            return false;
+        }
+
         // TODO: send email with transaction id after payment completion
 
         // save the transaction data to the server
-        Order::where('paymob_order', $json->obj->order->id)->update([
-            "paymob_id" => $json->obj->id,
-            "paymob_pending" => $json->obj->pending,
-            "paymob_success" => $json->obj->success,
-            "paymob_amount" => $json->obj->amount_cents / 100,
-        ]);
+        
+        $order->paymob_id = $json->obj->id;
+        $order->paymob_pending = $json->obj->pending;
+        $order->paymob_success = $json->obj->success;
+        $order->paymob_amount = $json->obj->amount_cents / 100;
+        $order->save();
+        event(new OrderCreated($order));
     }
 
     /**

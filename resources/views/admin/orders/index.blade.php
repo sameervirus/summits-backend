@@ -59,6 +59,8 @@
                         <h2>{{ $titles }} <small></small></h2>
                         <div class="panel_toolbox">
                             <button onclick="htmlTableToExcel('xlsx')">Export to Excel</button>
+                            <label><input type="checkbox" id="hideCancel"> Hide Cancelled</label>
+
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -106,7 +108,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($orders as $order)
-                                        <tr class="{{ $order->status_id == 4 ? 'bg-success' : ''}}{{ $order->status_id == 0 ? 'bg-danger' : ''}}">
+                                        <tr class="{{ $order->status_id == 4 ? 'bg-success' : ''}}{{ $order->status_id == 0 ? 'bg-danger has-cancel' : ''}}">
                                             <td class="column-id">{{ $order->id }}</td>
                                             <td class="column-payment_gateway">{{ $order->payment_gateway }}</td>
                                             <td class="column-notes">{{ $order->notes }}</td>
@@ -217,7 +219,12 @@
         });
 
         
-        
+        $('#hideCancel').change(function() {
+            var checked = $(this).is(':checked');     
+            $('.has-cancel').each(function() {
+                checked ? $(this).hide() : $(this).show();
+            });            
+        });
     });
     // Handle button click event
     function htmlTableToExcel(type){

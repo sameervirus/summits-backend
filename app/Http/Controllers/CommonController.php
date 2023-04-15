@@ -53,7 +53,7 @@ class CommonController extends Controller
             'path' => '/shops',
             'label' => 'menu-shops',
             'type' => 'mega',
-            'mega_categoryCol' => 5,
+            'mega_categoryCol' => 6,
             'mega_bannerMode' => 'none',
             'mega_bannerImg' => '/assets/images/mega/banner-menu.jpg',
             'mega_bannerUrl' => '/shops',

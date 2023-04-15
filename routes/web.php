@@ -46,6 +46,8 @@ Route::get('/pages', function() {
     return json_decode(Page::find(2)->content);
 });
 Route::get('/complete-order', function() {
-    $order = Order::latest()->first();
-    return \Mail::to($order->user->email)->send(new OrderPlaced($order));
+    // $order = Order::latest()->first();
+    // event(new OrderCreated($order));
+    // return $order->user->email;
+    // return \Mail::to($order->user->email)->send(new OrderPlaced($order));
 });
