@@ -22,7 +22,7 @@ class Order extends Model
                 'name',
                 'quantity',
                 'price'
-            );;
+            );
     }
 
     public function user() {
